@@ -37,9 +37,7 @@ module Ricer4
     #####################
     def load_plugins
       @directories.each do |directory|
-        if File.directory?("#{directory}/export")
-          load_export_dir("#{directory}/export")
-        end
+        load_rb_dir("#{directory}/export")
       end
       @directories.each do |directory|
         load_plugin_dir(directory)
@@ -51,12 +49,15 @@ module Ricer4
       Filewalker.proc_files(directory, '*.rb') do |file|
         load file
       end
+      load_rb_dir("#{directory}/model")
+      load_rb_dir("#{directory}/commands")
     end
     
-    def load_export_dir(directory)
-      Filewalker.traverse_files(directory, '*.rb') do |file|
-        bot.log.info{"Loading export file #{file}"}
-        load file
+    def load_rb_dir(directory)
+      if File.directory?(directory)
+        Filewalker.traverse_files(directory, '*.rb') do |file|
+          load file
+        end
       end
     end
     

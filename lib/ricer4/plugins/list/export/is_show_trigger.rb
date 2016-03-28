@@ -1,6 +1,6 @@
 module Ricer4::Extend::IsShowTrigger
   
-  IS_SHOW_TRIGGER_OPTIONS = {
+  IS_SHOW_TRIGGER_OPTIONS ||= {
     position_pattern: '<positions|valid_range_function:"range_valid?">',
     pagination_pattern: nil,
     with_welcome: false,

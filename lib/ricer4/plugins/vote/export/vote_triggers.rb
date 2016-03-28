@@ -1,3 +1,5 @@
+require "acts_as_votable"
+
 module Ricer4::Extend::VoteTriggers
   
   def is_vote_trigger(options={})

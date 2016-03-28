@@ -1,3 +1,4 @@
+require "kaminari"
 Kaminari::Hooks.init
 
 module Ricer4::Extend::IsListTrigger

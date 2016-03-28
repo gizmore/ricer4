@@ -1,3 +1,9 @@
+require "active_record"
+require "dusen"
+require 'edge_rider'
+require 'dusen/active_record/base_ext'
+require 'dusen/active_record/search_text'
+
 module Ricer4::Extend::IsSearchTrigger
 
   SEARCH_TRIGGER_OPTIONS ||= {

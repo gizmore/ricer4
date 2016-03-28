@@ -59,7 +59,7 @@ module Ricer4::Plugins::Shadowlamb
     has_setting name: :max_adjusted, scope: :bot, permission: :responsible, type: :integer, min: 0, max: 10000, default: 750
     
     ## Shadowtime
-    WORLD_STARTED_AT = DateTime.new(2048, 1, 1, 13, 37, 42)
+    WORLD_STARTED_AT ||= DateTime.new(2048, 1, 1, 13, 37, 42)
     has_setting name: :gamespeed,    scope: :bot, permission: :responsible, type: :integer,  default: 10, min: 1, max: 20
     has_setting name: :shadowtime,   scope: :bot, permission: :responsible, type: :datetime, default: WORLD_STARTED_AT
 #    has_setting name: :tickseconds,  scope: :bot, permission: :responsible, type: :integer,  default: 12, min: 1, max: 128
@@ -81,7 +81,7 @@ module Ricer4::Plugins::Shadowlamb
     # end
 
     ## Installer
-    ACTIVE_RECORD_CLASSES = [  
+    ACTIVE_RECORD_CLASSES ||= [  
       'ValueName', 'Value', 'ItemName', 
       'Race', 'Gender', 'ProfessionName', 'Profession',
       'Quest', 'Mission', 'MissionVar',

@@ -1,7 +1,7 @@
 module Ricer4::Plugins::Auth
   class EmailConfirmation < ActiveRecord::Base
     
-    PIN_LENGTH = 16
+    PIN_LENGTH ||= 16
     
     # Types
     SETUP_CONFIRM ||= 1

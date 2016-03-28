@@ -58,7 +58,7 @@ module Ricer4::Extend::AbboTriggers
     class_eval do |klass|
       is_abbo_trigger(options)
       trigger_is options[:trigger] || :abbo
-      def plugin_description(long); t!(:description) rescue I18n.t('ricer3.plugins.abbos.add_abbo.description', classname:abbo_classname, classname:abbo_classname); end
+      def plugin_description(long); t!(:description) rescue I18n.t('ricer3.plugins.abbos.add_abbo.description', classname: abbo_classname); end
       has_usage  '<id>', function: :execute
       has_usage  '<search_term>', function: :execute
       def execute(arg)

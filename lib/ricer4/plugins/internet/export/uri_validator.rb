@@ -58,7 +58,7 @@ class UriValidator < ActiveModel::EachValidator
     end
   end
 
-  I18N = {
+  I18N ||= {
     ping: 'has an unreachable host',
     exist: 'cannot be found on the remote host',
     connect: 'refused the tcp connection',
