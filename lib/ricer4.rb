@@ -18,6 +18,7 @@ module Ricer4
     end
   end
 
+  load "ricer4/validators/all.rb"
   load "ricer4/net/all.rb"
   load "ricer4/usage/all.rb"
 

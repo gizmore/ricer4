@@ -1,8 +1,6 @@
 module Ricer4::Plugins::Log
   class Binlog
     
-    extend Ricer4::Include::Base
-
     def self.upgrade_1
       m = ActiveRecord::Migration
       m.create_table :binlogs do |t|

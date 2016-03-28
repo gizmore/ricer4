@@ -1,3 +1,5 @@
+load File.dirname(__FILE__)+"/model/quote.rb"
+
 module Ricer4::Plugins::Quote
   class Quote < Ricer4::Plugin
     

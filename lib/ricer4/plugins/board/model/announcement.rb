@@ -2,8 +2,6 @@ module Ricer4::Plugins::Board
   module Model
     class Announcement
       
-      include Ricer4::Include::Base
-      include Ricer4::Include::Translates
       include Ricer4::Include::NoHighlight
   
       attr_reader :thread, :date, :board, :url, :user, :title

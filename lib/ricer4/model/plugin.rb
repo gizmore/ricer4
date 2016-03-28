@@ -29,20 +29,20 @@ module Ricer4
       arm_group(:responsible, :public, :voice, :halfop, :operator, :admin, :founder, :ircop, :responsible)
     end
     
-    # def self.plugin_module_object; @plugin_module_object ||= Object.const_get(name.deconstantize); end
-    # def self.plugin_module; @plugin_module ||= name.split('::')[-2]; end
-    # def self.plugin_name; @plugin_name ||= name.split('::')[-2..-1].join('/'); end
-    # def plugin_module_object; self.class.plugin_module_object; end
-    # def plugin_module; self.class.plugin_module; end
-    # def plugin_name; self.class.plugin_name; end
+    def self.plugin_module_object; @plugin_module_object ||= Object.const_get(name.deconstantize); end
+    def self.plugin_module; @plugin_module ||= name.split('::')[-2]; end
+    def self.plugin_name; @plugin_name ||= name.split('::')[-2..-1].join('/'); end
+    def plugin_module_object; self.class.plugin_module_object; end
+    def plugin_module; self.class.plugin_module; end
+    def plugin_name; self.class.plugin_name; end
     
-    # def plugin_date; '2015-11-09T13:37:42Z'; end
-    # def plugin_author; 'gizmore@wechall.net'; end
-    # def plugin_version; 1; end
-    # def plugin_license; :RICED; end
-    # def plugin_priority; 50; end
-    # def plugin_trigger; nil; end
-    # def plugin_description(long); t!(:description) rescue nil; end
+    def plugin_date; '2015-11-09T13:37:42Z'; end
+    def plugin_author; 'gizmore@wechall.net'; end
+    def plugin_version; 1; end
+    def plugin_license; :RICED; end
+    def plugin_priority; 50; end
+    def plugin_trigger; nil; end
+    def plugin_description(long); t!(:description) rescue nil; end
     # def plugin_init; end
 
   end

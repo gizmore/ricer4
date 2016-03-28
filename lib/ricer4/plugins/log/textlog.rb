@@ -1,8 +1,6 @@
 module Ricer4::Plugins::Log
   class Textlog
     
-    extend Ricer4::Include::Base
-    
     def self.irc_message(object)
       input = !object.is_a?(Ricer4::Reply)
       message = input ? object : object.message

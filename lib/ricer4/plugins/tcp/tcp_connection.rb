@@ -1,8 +1,8 @@
 module Ricer4::Plugins::Tcp
   class TcpConnection
     
-    include Ricer4::Include::Base
     arm_events
+
     include Ricer4::Include::Threaded
     include Ricer4::Include::UserConnector
 

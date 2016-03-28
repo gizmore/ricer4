@@ -1,3 +1,4 @@
+require "open4"
 module Ricer4::Plugins::Cvs
   class System
     

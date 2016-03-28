@@ -2,7 +2,6 @@ module Ricer4::Plugins::Todo
   module Model
     class Entry < ActiveRecord::Base
       
-      include Ricer4::Include::Base
       include Ricer4::Include::Readable
   
       self.table_name = 'todo_entries';
