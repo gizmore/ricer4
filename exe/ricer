@@ -1,0 +1,14 @@
+require "byebug"
+require "rubygems"
+require "bundler"
+Bundler.setup
+byebug
+Bundler.require
+
+load "active_record/magic/locale/arm-encoding.rb"    
+load "active_record/magic/locale/arm-locale.rb"    
+load "active_record/magic/locale/arm-timezone.rb"    
+load "active_record/magic/permission/arm-permissions.rb"    
+
+bot = Ricer4::Bot.new(ARGV[0])
+bot.connect

@@ -1,0 +1,117 @@
+module Ricer4::Plugins::Board
+  module Model
+    class Board < ActiveRecord::Base
+  
+      self.table_name = :wechall_boards
+      
+      include Ricer4::Include::Readable
+      
+      abbonementable_by([Ricer4::User, Ricer4::Channel])
+  
+      validates :name, named_id: true
+      validates :url,  uri: { ping: false, trust: false, connect: true, exist: true, schemes: [:http,:https] }
+      validate  :url_has_limit_and_date
+  
+      scope :enabled, -> { where("#{table_name}.deleted_at IS NULL") }
+      scope :disabled, -> { where("#{table_name}.deleted_at IS NOT NULL") }
+  
+      def self.upgrade_1
+        return if table_exists?
+        m = ActiveRecord::Migration.new
+        m.create_table table_name do |t|
+          t.string    :name,         :null => false, :length => 24, :charset => :ascii, :collation => :ascii_bin
+          t.string    :url,          :null => false
+          t.integer   :last_thread,  :null => false, :default => 0, :unsigned => true
+          t.timestamp :checked_at,   :null => true,  :default => nil
+          t.timestamp :deleted_at,   :null => true,  :default => nil
+          t.timestamps :null => false
+        end
+        m.add_index table_name, :url,   unique: true
+        m.add_index table_name, :name,  unique: true
+      end
+      
+      def url_has_limit_and_date
+        errors[:url] = "does not contain :DATE:" unless self.url.index(':DATE:')
+        errors[:url] = "does not contain :LIMIT:" unless self.url.index(':LIMIT:')
+      end
+      
+      def bot
+        Ricer4::Bot.instance
+      end
+      
+      def epoch
+        self.checked_at = Time.new(2010, 12, 31)
+      end
+      
+      def replace_date
+        gdo_date(self.checked_at||epoch)
+      end
+      
+      def replaced_url
+        self.url.gsub(':DATE:', replace_date).gsub(':LIMIT:', '5')
+      end
+      
+      def test_protocol
+        entries = fetch_entries!
+        return false if entries.length < 1
+        entries
+      end
+      
+      def fetch_entries
+        fetch_entries! rescue []
+      end
+      
+      def fetch_entries!
+        bot.log.debug("Checking WeChall Board: #{self.replaced_url}")
+        parse_content(open(self.replaced_url))
+      end
+      
+      def parse_content(content)
+        announcements = []
+        content.string.split("\n").each do |line|
+          unless line.trim!.empty?
+            announcement = parse_line(line)
+            announcements.push(announcement) if announcement
+          end
+        end
+        clean_announcements(announcements)
+      end
+      
+      def clean_announcements(announcements)
+        delete = []
+        deleting = true
+        announcements.each{|a| self.checked_at = a.date if a.date > self.checked_at }
+        announcements.each do |a|
+          if deleting
+            if a.date == self.checked_at
+              delete.push(a)
+              if (a.thread == self.last_thread)
+                deleting = false
+              end
+            end
+          end
+        end
+        delete.each{|d|announcements.delete(d)} and  announcements
+      end
+      
+      def unescape(s)
+        s.gsub('\\:', ':')
+      end
+      
+      def parse_line(line)
+        parts = line.split("::")
+        raise StandardError.new("Line has invalid number of parts: #{line}") if parts.length != 6
+        # Map the parts
+        parts.map!{|s| unescape(s) }
+        parts[0] = parts[0].to_i; parts[2] = parts[2].to_i
+        parts[1] = ruby_date(parts[1])
+        # End of maps
+        # OLD:NEW
+        parts[1] < self.checked_at ?
+          nil :
+          Model::Announcement.new(parts)
+      end
+      
+    end
+  end
+end
