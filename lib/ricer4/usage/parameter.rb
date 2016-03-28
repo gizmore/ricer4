@@ -10,7 +10,7 @@ module Ricer4
       pattern.trim!('<>') # parse '<>'
       eater = pattern.starts_with?('.'); pattern.trim!('.') # parse ..eater..
       options = options_from_optionstr(pattern.substr_from('|') || '') # parse options:4,foo:5
-      classname = (pattern.substr_to('|') || pattern).camelize # parse classname integer:
+      classname = (pattern.substr_to('|') || pattern) # parse classname integer:
       options.merge!({
         type: classname,
         null: optional,
