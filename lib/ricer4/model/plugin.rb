@@ -3,12 +3,14 @@ module Ricer4
     
     self.table_name = "ricer_plugins"
     
+    attr_accessor :plugin_dir    
+
     arm_cache
     arm_named_cache(:name)
     
     arm_events
     
-    arm_install() do |migration|
+    arm_install do |migration|
       migration.create_table(table_name) do |t|
         t.string   :name,     :null => false, :limit => 64, :charset => :ascii, :collation => :ascii_bin, :unique => true
         t.integer  :revision, :null => false, :limit =>  3, :default => 0, :unsigned => true
@@ -43,7 +45,7 @@ module Ricer4
     def plugin_priority; 50; end
     def plugin_trigger; nil; end
     def plugin_description(long); t!(:description) rescue nil; end
-    # def plugin_init; end
+    def plugin_init; end
 
   end
 end

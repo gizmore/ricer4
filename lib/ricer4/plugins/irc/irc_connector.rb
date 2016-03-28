@@ -64,8 +64,8 @@ module Ricer4::Connectors
         true
       rescue StandardError => e
         bot.log.exception(e, false)
-        server.broadcast("irc/connect/failure", server, e)
-        server.broadcast("server/connect/failure", server, e)
+        arm_signal(server, "irc/connect/failure", server, e)
+        arm_signal(server, "server/connect/failure", server, e)
         false
       end
     end
@@ -75,11 +75,11 @@ module Ricer4::Connectors
       while @connected || (bot.running && server.persisted?) 
         if @connected
           if message = get_message
-            server.broadcast("ricer/incoming", message.raw)
+            arm_signal(server, "ricer/incoming", message.raw)
             setup_message(message)
-            server.broadcast("ricer/receive", message)
-            server.broadcast("ricer/received", message)
-            server.broadcast("irc/#{message.type}", message)
+            arm_signal(server, "ricer/receive", message)
+            arm_signal(server, "ricer/received", message)
+            arm_signal(server, "irc/#{message.type}", message)
           else
             disconnect!
           end
@@ -115,7 +115,7 @@ module Ricer4::Connectors
       # @frame = Ricer4::Queue::Frame.new(server)
       send_queue
       fair_queue
-      server.broadcast('irc/handshake', server)
+      arm_signal(server, 'irc/handshake', server)
     end
     
     ###############
@@ -186,7 +186,7 @@ module Ricer4::Connectors
     
     def send_socket(line)
       begin
-        server.broadcast("ricer/outgoing", line)
+        arm_signal(server, "ricer/outgoing", line)
         @socket.write "#{line}\r\n"
         @frame.sent
       rescue StandardError => e
@@ -229,7 +229,7 @@ module Ricer4::Connectors
     end
     
     def send_socket_reply(reply)
-      server.broadcast("ricer/replying", reply)
+      arm_signal(server, "ricer/replying", reply)
       send_socket(reply.text)
     end
     

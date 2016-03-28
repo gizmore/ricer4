@@ -64,7 +64,7 @@ module Ricer4::Extend::HasUsage
             elsif !usage.has_permission?
               wanted_permission = least_permission(usage.get_permission, wanted_permission)
             elsif args = usage.parse_args(self, line.dup)
-              broadcast('ricer/triggered', self)
+              arm_publish('ricer/triggered', self)
               return usage.execute(self, args)
             end
           rescue Ricer4::ParameterException => e

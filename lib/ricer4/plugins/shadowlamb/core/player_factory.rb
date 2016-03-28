@@ -99,9 +99,9 @@ module Ricer4::Plugins::Shadowlamb::Core
       return if @parties.include?(party)
       @parties.push(party)
       if party.persisted?
-        party.broadcast('party/loaded', party)
+        arm_publish('party/loaded', party)
       else
-        party.broadcast('party/created', party)
+        arm_publish('party/created', party)
       end
 #      party.save!
     end
@@ -137,7 +137,7 @@ module Ricer4::Plugins::Shadowlamb::Core
       human = Human.where(:user_id => user.id).first
       if (human != nil)
         add_human(human.modify)
-        broadcast('player/loaded', human)
+        arm_publish('player/loaded', human)
       end
       human
     end

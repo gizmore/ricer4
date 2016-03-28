@@ -26,7 +26,7 @@ module Ricer4::Connectors
           
           ws.onmessage { |msg|
   
-            server.broadcast("ricer/incoming", msg)
+            arm_signal(server, "ricer/incoming", msg)
   
             if msg.length == 0
               #bot.log.debug("empty line: #{msg}")
@@ -40,9 +40,9 @@ module Ricer4::Connectors
               message.server = server
               message.sender = user
               message.target = bot
-              #server.broadcast("ricer/receive", message)
-              #server.broadcast("ricer/received", message)
-              server.broadcast("ricer/messaged", message)
+              #arm_signal(server, "ricer/receive", message)
+              #arm_signal(server, "ricer/received", message)
+              arm_signal(server, "ricer/messaged", message)
             else
               xlin_login(ws, msg)
             end
@@ -117,7 +117,7 @@ module Ricer4::Connectors
     end
     
     def send_reply(reply)
-      server.broadcast("ricer/outgoing", reply.text)
+      arm_signal(server, "ricer/outgoing", reply.text)
       ws = reply.target.instance_variable_get(:@websocket)
       ws.send(reply.text)
     end

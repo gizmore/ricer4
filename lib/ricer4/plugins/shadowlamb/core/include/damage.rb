@@ -12,8 +12,8 @@ module Ricer4::Plugins::Shadowlamb::Core::Include::Damage
 
   def _cause_damage_to(attacker, victim, with, damage)
     begin
-      broadcast('player/before/take_damage', attacker, victim, with, damage)
-      broadcast('player/before/cause_damage', attacker, victim, with, damage)
+      arm_publish('player/before/take_damage', attacker, victim, with, damage)
+      arm_publish('player/before/cause_damage', attacker, victim, with, damage)
       with.sl5_before_cause_damage(attacker, victim, with, damage)
       victim.sl5_before_take_damage(attacker, victim, with, damage)
       attacker.sl5_before_cause_damage(attacker, victim, with, damage)
@@ -23,8 +23,8 @@ module Ricer4::Plugins::Shadowlamb::Core::Include::Damage
       attacker.sl5_after_cause_damage(attacker, victim, with, damage)
       victim.sl5_after_take_damage(attacker, victim, with, damage)
       with.sl5_after_cause_damage(attacker, victim, with, damage)
-      broadcast('player/after/cause_damage', attacker, victim, with, damage)
-      broadcast('player/after/take_damage', attacker, victim, with, damage)
+      arm_publish('player/after/cause_damage', attacker, victim, with, damage)
+      arm_publish('player/after/take_damage', attacker, victim, with, damage)
       
       if victim.dead?
         _cause_death_to(attacker, victim, with, damage)
@@ -41,8 +41,8 @@ module Ricer4::Plugins::Shadowlamb::Core::Include::Damage
     with.sl5_before_killed(attacker, victim, with, damage)
     victim.sl5_before_killed(attacker, victim, with, damage)
     attacker.sl5_before_kill(attacker, victim, with, damage)
-    broadcast('player/before/kill', attacker, victim, with, damage)
-    broadcast('player/before/killed', attacker, victim, with, damage)
+    arm_publish('player/before/kill', attacker, victim, with, damage)
+    arm_publish('player/before/killed', attacker, victim, with, damage)
     
     # Reset attack lock
 #    attacker.combat_stack.combat_target = nil
@@ -50,8 +50,8 @@ module Ricer4::Plugins::Shadowlamb::Core::Include::Damage
     # Respawn victim
     victim.respawn!
     
-    broadcast('player/after/killed', attacker, victim, with, damage)
-    broadcast('player/after/kill', attacker, victim, with, damage)
+    arm_publish('player/after/killed', attacker, victim, with, damage)
+    arm_publish('player/after/kill', attacker, victim, with, damage)
     attacker.sl5_after_kill(attacker, victim, with, damage)
     victim.sl5_after_killed(attacker, victim, with, damage)
     with.sl5_after_kill(attacker, victim, with, damage)

@@ -3,5 +3,9 @@ module Ricer4::Plugins::Download
     
     has_files
     
+    def plugin_init
+      
+    end
+    
   end
 end

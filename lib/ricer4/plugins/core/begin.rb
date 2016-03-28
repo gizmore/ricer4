@@ -55,7 +55,7 @@ module Ricer4::Plugins::Core
     
     def finish
       return rply :err_no_begin unless has_line?
-      broadcast('ricer/messaged', multiline_message)
+      arm_publish('ricer/messaged', multiline_message)
     end
     
     def multiline_message

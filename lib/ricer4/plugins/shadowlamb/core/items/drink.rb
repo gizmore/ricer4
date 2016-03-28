@@ -3,7 +3,7 @@ module Ricer4::Plugins::Shadowlamb::Core::Items
   class Drink < Consumable
   
     def consume
-      broadcast('player/consumed/drink', owner, self)
+      arm_publish('player/consumed/drink', owner, self)
     end
       
   end

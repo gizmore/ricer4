@@ -27,7 +27,7 @@ module Ricer4::Plugins::Todo
         time: entry.display_time)
 
       # announce
-      broadcast('todo/entry/done', entry)
+      arm_publish('todo/entry/done', entry)
     end
     
   end

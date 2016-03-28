@@ -1,3 +1,5 @@
+require "geocoder"
+
 load File.expand_path("../shadowmodules.rb", __FILE__)
 load File.expand_path("../shadowthreads.rb", __FILE__)
 
@@ -33,9 +35,9 @@ module Ricer4::Plugins::Shadowlamb
 #    has_setting name: :global_rm,    scope: :bot, permission: :responsible, type: :boolean,  default: false
     
     ## Evil shortcut manipulation    
-    has_setting name: :shortcut, scope: :user,    permission: :public,   type: :string, pattern: /^[-*#,.!\"§$%&_<x]$/, default: '#'
-    has_setting name: :shortcut, scope: :channel, permission: :operator, type: :string, pattern: /^[-*#,.!\"§$%&_<x]$/, default: '#'
-    def shortcut; get_setting(:shortcut); end
+#    has_setting name: :shortcut, scope: :user,    permission: :public,   type: :string, pattern: /^[-*#,.!\"§$%&_<x]$/, default: '#'
+#    has_setting name: :shortcut, scope: :channel, permission: :operator, type: :string, pattern: /^[-*#,.!\"§$%&_<x]$/, default: '#'
+#    def shortcut; get_setting(:shortcut); end
     # def on_privmsg
       # shortcut = self.shortcut
       # unless shortcut == 'x'
@@ -77,12 +79,13 @@ module Ricer4::Plugins::Shadowlamb
     
     def load_shadowlamb
       load_shadowlamb_code
+      ActiveRecord::Magic::Update.run
       install_data_set
       load_ai
       load_area_helpers
       mob_factory.plugin_reload
       Ricer4::Plugins::Shadowlamb::Core::Loader::World.instance.load_world
-      broadcast('world/loaded')
+      arm_publish('world/loaded')
 #      load_core
       # Kick it!
 #      factory.startup_active_parties
@@ -119,6 +122,12 @@ module Ricer4::Plugins::Shadowlamb
       active_record_classes do |klass|
         klass.install_data_set if klass.respond_to?(:install_data_set)
       end
+      # Filewalker.classes_do(Ricer4::Plugins::Shadowlamb::Core) do |klass|
+        # if klass.respond_to?(:install_data_set)
+          # byebug
+          # klass.install_data_set
+        # end
+      # end
     end
     
     def ai_dir; File.dirname(__FILE__)+'/core/ai'; end

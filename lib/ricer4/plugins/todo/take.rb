@@ -17,7 +17,7 @@ module Ricer4::Plugins::Todo
         entry.worker_id = sender.id
         entry.save!
         reply entry.display_take
-        broadcast('todo/entry/taken', entry)
+        arm_publish('todo/entry/taken', entry)
       end
     end
 

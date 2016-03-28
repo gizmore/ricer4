@@ -25,14 +25,14 @@ module Ricer4::Plugins::Admin
 
       # Reload core again
       clear_plugin_class_variables
-      broadcast("ricer/reload")
+      arm_publish("ricer/reload")
 
       Ricer4::Core::Init.reload_core
       # Reload plugins again
       bot.loader.reload_plugins
       bot.loader.install if install_plugins
       bot.loader.init_plugins
-      broadcast("ricer/reloaded")
+      arm_publish("ricer/reloaded")
     end
     
     private

@@ -5,19 +5,19 @@ module Ricer4::Include::UserConnector
   end
   
   def get_user(server, user_name)
-    user = Ricer3::User.global_cache["#{user_name.downcase}:#{server.id}"] 
+    user = Ricer4::User.global_cache["#{user_name.downcase}:#{server.id}"] 
     return user if user
-    user = Ricer3::User.where(user_attributes(server, user_name)).first
+    user = Ricer4::User.where(user_attributes(server, user_name)).first
     if user
       user.set_online(true)
-      broadcast('ricer/user/loaded', user)
+      arm_publish('ricer/user/loaded', user)
     end
     user
   end
   
   def create_user(server, user_name)
-    user = Ricer3::User.create!(user_attributes(server, user_name))
-    broadcast('ricer/user/created', user)
+    user = Ricer4::User.create!(user_attributes(server, user_name))
+    arm_publish('ricer/user/created', user)
     user.set_online(true)
     user
   end
@@ -29,7 +29,7 @@ module Ricer4::Include::UserConnector
   
   def user_quit_server(server, user)
     user.set_online(false)
-    broadcast('ricer/user/quit', user)
+    arm_publish('ricer/user/quit', user)
   end
   
 end

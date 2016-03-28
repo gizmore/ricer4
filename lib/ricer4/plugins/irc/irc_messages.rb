@@ -18,7 +18,7 @@ module Ricer4::Plugins::Irc
     end
     
     def received_irc_message(type, message)
-      broadcast('ricer/messaged', message) unless message.from_server?
+      arm_publish('ricer/messaged', message) unless message.from_server?
     end
     
   end

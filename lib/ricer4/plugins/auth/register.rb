@@ -14,7 +14,7 @@ module Ricer4::Plugins::Auth
       sender.save!
       sender.login!
       rply :msg_registered
-      server.broadcast('user/signed/up', sender)
+      arm_signal(server, 'user/signed/up', sender)
     end
     
     has_usage '<password> <password>', function: :change_password
@@ -25,7 +25,7 @@ module Ricer4::Plugins::Auth
       sender.save!
       sender.login!
       rply :msg_changed_pass
-      server.broadcast('user/changed/pass', sender)
+      arm_signal(server, 'user/changed/pass', sender)
     end
     
   end

@@ -1,6 +1,6 @@
 module Ricer4::Plugins::Shadowlamb::Core
   class Ai::Core
-
+    
     def initialize(player)
       @player = player # humans can purchase plugins?
       @player.instance_variable_set(:@sl5_AI, self)

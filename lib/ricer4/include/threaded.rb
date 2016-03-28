@@ -6,8 +6,8 @@ module Ricer4::Include::Threaded
   
   def threaded_org(&block)
     current_command.threading = true
-    guid = Ricer3::Thread.fork_counter_inc
-    Ricer3::Thread.execute do
+    guid = Ricer4::Thread.fork_counter_inc
+    Ricer4::Thread.execute do
       begin
         bot.log.debug "[#{guid}] Started thread at #{display_proc(proc)}"
         yield
@@ -23,8 +23,8 @@ module Ricer4::Include::Threaded
   end
   
   def worker_threaded(&block)
-    guid = Ricer3::Thread.fork_counter_inc
-    Ricer3::Thread.execute do
+    guid = Ricer4::Thread.fork_counter_inc
+    Ricer4::Thread.execute do
       begin
         bot.log.debug "[#{guid}] Started worker thread at #{display_proc(proc)}"
         yield
@@ -39,8 +39,8 @@ module Ricer4::Include::Threaded
   end
 
   def service_threaded(&block)
-    guid = Ricer3::Thread.fork_counter_inc
-    Ricer3::Thread.execute do
+    guid = Ricer4::Thread.fork_counter_inc
+    Ricer4::Thread.execute do
       begin
         bot.log.debug "[#{guid}] Started service thread at #{display_proc(proc)}"
         yield

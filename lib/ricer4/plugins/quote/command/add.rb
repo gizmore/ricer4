@@ -7,7 +7,7 @@ module Ricer4::Plugins::Quote
     def execute(text)
       quote = Entity.create!({ user: sender, channel: channel, message: text })
       rply :msg_added, :quote_id => quote.id
-      broadcast('ricer/quote/added', quote)
+      arm_publish('ricer/quote/added', quote)
     end
 
   end

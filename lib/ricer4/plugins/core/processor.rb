@@ -8,7 +8,7 @@ module Ricer4::Plugins::Core
     def plugin_init
       @parser = Ricer4::CommandParser.new
       arm_subscribe('ricer/messaged') do |message|
-        broadcast('ricer/processing', message)
+        arm_publish('ricer/processing', message)
         unless message.processed
           if line = triggered_line(message)
             begin

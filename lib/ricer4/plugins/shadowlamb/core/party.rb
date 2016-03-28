@@ -86,7 +86,7 @@ module Ricer4::Plugins::Shadowlamb::Core
     after_initialize :register_events
     def register_events
       bot.log.debug("Party.register_events()")
-      self.hook('party/moved') do; moved; end
+      arm_subscribe('party/moved', self) do; moved; end
     end
     
     ###############
@@ -273,11 +273,11 @@ module Ricer4::Plugins::Shadowlamb::Core
     end
     
     def publish_party(event_group, event_name, *event_args)
-      broadcast("party/#{event_group}/#{event_name}", self, *event_args)
+      arm_publish("party/#{event_group}/#{event_name}", self, *event_args)
     end
 
     def publish_members(event_group, event_name, *event_args)
-      members.each{|member|broadcast("player/#{event_group}/#{event_name}", member, *event_args)}
+      members.each{|member|arm_publish("player/#{event_group}/#{event_name}", member, *event_args)}
     end    
 
     ###############
@@ -513,21 +513,21 @@ module Ricer4::Plugins::Shadowlamb::Core
     ###
     def party_changes_location(party, old_location, new_location)
       if old_location
-        party.broadcast("party/leaves/location", party, old_location, new_location)
+        arm_publish("party/leaves/location", party, old_location, new_location)
       end
       if new_location
         party.location, party.area = new_location, new_location.area
-        party.broadcast("party/reaches/location", party, old_location, new_location)
+        arm_publish("party/reaches/location", party, old_location, new_location)
       else
         party.location = false
       end
     end
 
     def party_changes_area(party, old_area, new_area)
-      party.broadcast("party/leaves/area", party, old_area, new_area)
+      arm_publish("party/leaves/area", party, old_area, new_area)
       party.area = new_area
       send_message("shadowlamb.msg_entered_area", area: new_area.display_name)
-      party.broadcast("party/enters/area", party, old_area, new_area)
+      arm_publish("party/enters/area", party, old_area, new_area)
     end
 
   end

@@ -11,5 +11,9 @@ module Ricer4::Plugins::Tcp
       open plugin_file_path('public_key.pem'), 'w' do |io| io.write key.public_key.to_pem end
     end
     
+    def plugin_init
+      
+    end
+    
   end
 end

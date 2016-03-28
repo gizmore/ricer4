@@ -7,7 +7,7 @@ module Ricer4::Plugins::Shadowlamb::Core
           Object.const_get("Ricer4::Plugins::Shadowlamb::World::#{options[:story]}").sl5_on_tell($1, $2, $3)
         end
       end
-      player.arm_subscribe(:sl5_on_tell) do
+      arm_subscribe(:sl5_on_tell, player) do
         options[:proc].call
       end
     end

@@ -1,10 +1,10 @@
 module Ricer4
   class User < ActiveRecord::Magic::User
     
-#    include Ricer3::Include::Messages
-#    include Ricer3::Include::OnlineRecord
-#    include Ricer3::Include::LocalizedRecord
-#    include Ricer3::Include::NoHighlight
+#    include Ricer4::Include::Messages
+#    include Ricer4::Include::OnlineRecord
+#    include Ricer4::Include::LocalizedRecord
+#    include Ricer4::Include::NoHighlight
 
     self.table_name = 'arm_users'
 
@@ -45,9 +45,9 @@ module Ricer4
     #################
     ### Localized ###
     #################
-    # def locale; locale_id == nil ? server.locale : Ricer3::Locale.by_id(self.locale_id); end
-    # def timezone; timezone_id == nil ? server.timezone : Ricer3::Timezone.by_id(self.timezone_id); end
-    # def encoding; encoding_id == nil ? server.encoding : Ricer3::Encoding.by_id(self.encoding_id); end
+    # def locale; locale_id == nil ? server.locale : Ricer4::Locale.by_id(self.locale_id); end
+    # def timezone; timezone_id == nil ? server.timezone : Ricer4::Timezone.by_id(self.timezone_id); end
+    # def encoding; encoding_id == nil ? server.encoding : Ricer4::Encoding.by_id(self.encoding_id); end
 
 
     ###############
@@ -59,7 +59,7 @@ module Ricer4
     ##############
     ### Helper ###
     ##############
-    def server; Ricer3::Server.by_id(self.server_id); end
+    def server; Ricer4::Server.by_id(self.server_id); end
     
     #####################
     ### Communication ###
@@ -72,7 +72,7 @@ module Ricer4
     ###########################
     # Get all permission objects
     def all_chanperms
-      Ricer3::Chanperm.where(:user_id => self.id)
+      Ricer4::Chanperm.where(:user_id => self.id)
     end
     
     # Get permission object
@@ -81,11 +81,11 @@ module Ricer4
     end
     
     def cached_chanperm_for(channel)
-      Ricer3::Chanperm.global_cache["#{self.id}:#{channel.id}"]
+      Ricer4::Chanperm.global_cache["#{self.id}:#{channel.id}"]
     end
 
     def load_chanperm_for(channel)
-      Ricer3::Chanperm.
+      Ricer4::Chanperm.
         create_with(:permissions => self.permissions).
         find_or_create_by(:user_id => self.id, :channel_id => channel.id)
     end
@@ -102,7 +102,7 @@ module Ricer4
     ##########################
     # Get permission object
     def permission
-      Ricer3::Permission.by_permission(self.permissions, authenticated?)
+      Ricer4::Permission.by_permission(self.permissions, authenticated?)
     end
     
     # Check by permission object
@@ -134,7 +134,7 @@ module Ricer4
     def set_authed(bool)
       if @authenticated != bool
         @authenticated = bool
-        Ricer3::Chanperm.where(:user_id => self.id, :online => true).each do |chanperm|
+        Ricer4::Chanperm.where(:user_id => self.id, :online => true).each do |chanperm|
           chanperm.authenticated = bool
         end
       end

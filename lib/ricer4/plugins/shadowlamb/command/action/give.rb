@@ -26,7 +26,7 @@ module Ricer4::Plugins::Shadowlamb
       weight_before = Core::ItemList.weight(items)
       giver.sl5_on_player_gives_items(giver, receiver, items)
       receiver.sl5_on_player_receives_items(giver, receiver, items)
-      broadcast('player/gives/items', giver, receiver, items)
+      arm_publish('player/gives/items', giver, receiver, items)
       weight_before < Core::ItemList.weight(items)
     end
     

@@ -74,7 +74,7 @@ module Ricer4::Plugins::Shadowlamb::Shadowthreads
     shadowthread(tick_time) do |elapsed|
       shadowverse.mutex.synchronize do
         begin
-          self.class.broadcast(event, elapsed)
+          arm_publish(event, elapsed)
         rescue StandardError => e
           bot.log.exception(e)
         end

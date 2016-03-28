@@ -53,7 +53,7 @@ module Ricer4::Plugins::Purple
       sender = sender.substr_to('/') || sender # discard anything after '/'
       # filter text
       text = filter_text(text)
-      broadcast("ricer/incoming", text)
+      arm_publish("ricer/incoming", text)
       # create user
       unless user = get_user(server, sender)
         user = create_user(server, sender)
@@ -71,9 +71,9 @@ module Ricer4::Plugins::Purple
       message.args = [sender, text]
       message.server = server
       message.sender = user
-      broadcast("ricer/receive", message)
-      broadcast("ricer/received", message)
-      broadcast("ricer/messaged", message)
+      arm_publish("ricer/receive", message)
+      arm_publish("ricer/received", message)
+      arm_publish("ricer/messaged", message)
     end
     
     def watch_signed_on_event(account)

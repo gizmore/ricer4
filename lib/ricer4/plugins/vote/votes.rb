@@ -6,5 +6,9 @@ module Ricer4::Plugins::Vote
       ActsAsVotableMigration.new.up
     end
     
+    def plugin_init
+      
+    end
+    
   end
 end

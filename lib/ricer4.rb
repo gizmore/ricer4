@@ -24,6 +24,8 @@ module Ricer4
 
   load "ricer4/bot.rb"
   
+  load "ricer4/command/command_parser.rb"
+  
   load "ricer4/model/all.rb"
   
   load "ricer4/loader/plugin_loader.rb"

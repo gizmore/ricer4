@@ -50,10 +50,10 @@ module Ricer4::Plugins::Shadowlamb::Core
     def accept
       self.status = ACCEPTED
       self.save!
-      self.quest.broadcast('mission/accept', self.player, self)
+      arm_signal(self.quest, 'mission/accept', self.player, self)
       self.player.localize!.send_msg("shadowlamb.quest.msg_quest_accepted", quest: self.display_name, info: self.displayinfo, accept: self.display_accept)
-      self.player.broadcast('player/mission/accepted', self.player, self)
-      self.quest.broadcast('mission/accepted', self.player, self)
+      arm_publish('player/mission/accepted', self.player, self)
+      arm_publish('mission/accepted', self.player, self)
     end
 
     def set_value(key, value)

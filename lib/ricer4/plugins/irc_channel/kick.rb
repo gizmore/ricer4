@@ -21,7 +21,7 @@ module Ricer4::Plugins::IrcChannel
     
     def plugin_init
       arm_subscribe('irc/kick') do |kicked_user|
-        broadcast('irc/kicked/self') if kicked_user.is_ricer?
+        arm_publish('irc/kicked/self') if kicked_user.is_ricer?
       end
       arm_subscribe('irc/kicked/self') do
         if get_setting(:kickjoin)

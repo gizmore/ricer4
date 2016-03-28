@@ -12,7 +12,7 @@ module Ricer4::Plugins::Shadowlamb
         human = spawn_human(sender, race, gender)
         human.party.set_lat_lon(52.321712, 10.235685)
         race.sl5_player_created(human)
-        human.broadcast('player/created', human)
+        human.arm_publish('player/created', human)
         human.party.save_party!
         rply :msg_created
       rescue => e

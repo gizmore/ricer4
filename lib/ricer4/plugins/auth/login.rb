@@ -13,7 +13,7 @@ module Ricer4::Plugins::Auth
     def execute(password)
       return rply :err_already_authenticated if user.authenticated?
       return rplyp :err_wrong_password unless user.authenticate!(password)
-      broadcast('user/signed/in', sender)
+      arm_publish('user/signed/in', sender)
       rply :msg_authenticated
     end
   

@@ -1,7 +1,7 @@
 module Ricer4
   class Bot
     
-    attr_reader :config, :log, :loader, :running
+    attr_reader :config, :log, :loader, :running, :rand
     
     def self.instance; @@instance; end
     
@@ -9,6 +9,8 @@ module Ricer4
       @@instance = self
       @log = arm_log
       @config = ActiveRecord::Magic::Config.new(config_path)
+      @config.seed ||= 31337
+      @rand = Random.new(@config.seed)
       @loader = Ricer4::PluginLoader.new
       @running = true
     end
@@ -36,6 +38,15 @@ module Ricer4
       end
       @loader.load_i18n
       @loader.load_plugins
+    end
+    
+    def start
+      @running = true
+      clear_online_status
+      mainloop
+    end
+    
+    def clear_online_status
     end
     
     def mainloop

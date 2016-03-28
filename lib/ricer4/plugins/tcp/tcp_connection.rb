@@ -45,7 +45,7 @@ module Ricer4::Plugins::Tcp
     end
     
     def write(text)
-      server.broadcast("ricer/outgoing", text)
+      arm_signal(server, "ricer/outgoing", text)
       @mutex.synchronize {
         @socket.puts(text) rescue xlin_logout
       }
@@ -62,16 +62,16 @@ module Ricer4::Plugins::Tcp
       message.raw = msg
       message.server = @server
 
-      server.broadcast("ricer/incoming", message.raw)
-      server.broadcast("ricer/receive", message)
-      server.broadcast("ricer/received", message)
+      arm_signal(server, "ricer/incoming", message.raw)
+      arm_signal(server, "ricer/receive", message)
+      arm_signal(server, "ricer/received", message)
       
       if @user
         message.prefix = @user.hostmask
         message.sender = @user
         message.type = "PRIVMSG"
         message.args = [@user.name, msg]
-        server.broadcast("ricer/messaged", message)
+        arm_signal(server, "ricer/messaged", message)
       else
         xlin, username, password = *msg.split(' ')
         if (xlin && (xlin.downcase == 'xlin')) && username && password

@@ -18,7 +18,7 @@ module Ricer4::Plugins::Irc
       end
       arm_subscribe("irc/376") do |message|
         motd = Motd.static_for_server(message.server)
-        broadcast("ricer/server/save/motd", message.server, motd.text.trim)
+        arm_publish("ricer/server/save/motd", message.server, motd.text.trim)
       end
       arm_subscribe("ricer/server/save/motd") do |server, line|
         unless line.empty?

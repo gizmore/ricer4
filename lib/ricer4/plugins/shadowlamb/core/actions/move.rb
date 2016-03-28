@@ -81,13 +81,13 @@ module Ricer4::Plugins::Shadowlamb::Core
         party.set_lat_lon(old_lat, old_lon)
         party.stop!
       end
-      # party.broadcast('party/moved', party)
+      # arm_signal(party_area, 'party/moved', party)
 
       # Target coords reached
       if (old_dist == 0) || (new_sign != old_sign)
         party_reaches_coordinates(party)
       else
-        party.area.broadcast('party/moving', party)
+        arm_signal(party.area, 'party/moving', party)
       end
     end
     

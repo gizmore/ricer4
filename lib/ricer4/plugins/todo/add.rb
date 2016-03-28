@@ -12,7 +12,7 @@ module Ricer4::Plugins::Todo
       })
       entry.save!
       reply(entry.display_item(entry.id))
-      broadcast('todo/entry/added', entry)
+      arm_publish('todo/entry/added', entry)
     end
     
   end

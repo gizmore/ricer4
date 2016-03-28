@@ -1,6 +1,8 @@
 module Ricer4::Plugins::Shadowlamb::Core
   class Ai::Plugin
     
+    arm_events
+
     include Include::Base
     include Include::Dice
     include Include::Translates

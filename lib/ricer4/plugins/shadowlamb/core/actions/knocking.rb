@@ -38,7 +38,7 @@ module Ricer4::Plugins::Shadowlamb::Core
     def enter_location(party)
       location = party.location
       party.push_action(:inside)
-      location.broadcast('party/enters/location', party, location)
+      arm_signal(location, 'party/enters/location', party, location)
     end
     
     def cannot_enter(party)
@@ -48,7 +48,7 @@ module Ricer4::Plugins::Shadowlamb::Core
     def stay_outside(party)
       location = party.location
       party.push_action(:parking)
-      location.broadcast('party/outside/location', party, location)
+      arm_signal(location, 'party/outside/location', party, location)
     end
 
 

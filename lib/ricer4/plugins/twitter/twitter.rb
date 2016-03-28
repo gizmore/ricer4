@@ -1,6 +1,8 @@
 module Ricer4::Plugins::Twitter
   class Twitter < Ricer4::Plugin
     
+    require "twitter"
+    
     attr_reader :client
     
     has_setting name: :api_key, type: :secret, min:8, max:64, scope: :bot, permission: :responsible, default: bot.config.twitter_api_key

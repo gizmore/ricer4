@@ -35,9 +35,9 @@ module ActiveRecord::Magic
     ###########
     def value_to_input(value)
       return value.collect{|v|value_to_input(v)}.join(',') if value.is_a?(Array)
-      return "#{value.name}:#{value.server.id}" if value.is_a?(Ricer3::User)
-      return "#{value.name}:#{value.server.id}" if value.is_a?(Ricer3::Channel)
-      return ":#{value.name}" if value.is_a?(Ricer3::Server)
+      return "#{value.name}:#{value.server.id}" if value.is_a?(Ricer4::User)
+      return "#{value.name}:#{value.server.id}" if value.is_a?(Ricer4::Channel)
+      return ":#{value.name}" if value.is_a?(Ricer4::Server)
     end
     
     ################
@@ -69,18 +69,18 @@ module ActiveRecord::Magic
     def input_to_users(input)
       input = input.substr_to('#')||input
       input = input.substr_to(':')||input
-      input_to_results(Ricer3::User, nil, input)
+      input_to_results(Ricer4::User, nil, input)
     end
 
     def input_to_channels(input)
       # input = input.substr_from('#')||input unless input.start_with?('#')
       input = input.substr_to(':')||input
-      input_to_results(Ricer3::Channel, :@channel_ids, input)
+      input_to_results(Ricer4::Channel, :@channel_ids, input)
     end
 
     def input_to_servers(input)
       input = input.rsubstr_from(':')||input
-      input_to_results(Ricer3::Server, :@server_ids, input)
+      input_to_results(Ricer4::Server, :@server_ids, input)
     end
     
     def input_to_online_relation(relation)

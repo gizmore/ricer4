@@ -89,7 +89,7 @@ module Ricer4::Plugins::Links
       
       entry.save_image(response.body) if write_image
       
-      broadcast('link/added', entry)
+      arm_publish('link/added', entry)
     end
     
     def extract_html_title(html)
