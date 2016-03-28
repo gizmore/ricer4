@@ -1,3 +1,5 @@
+require "acts_as_votable"
+
 module Ricer4::Plugins::Quote
   class Entity < ActiveRecord::Base
     
