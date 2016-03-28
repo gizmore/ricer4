@@ -3,7 +3,7 @@ module Ricer4::Plugins::Shadowlamb::Core
     
     self.table_name = 'sl5_parties'
     arm_cache
-    def should_cache?
+    def arm_cache?
       true
       # TODO: not need to cache stationary or offline players
       # memebers.each do |member|
@@ -54,27 +54,23 @@ module Ricer4::Plugins::Shadowlamb::Core
 #    has_items :loot
 #    LOOT_MODES = [:killer, :cycle, :random, :ground]
     
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.integer   :floor,          :limit => 1,  :default => 0,  :unsigned => false
-          t.integer   :loot_mode,      :limit => 1,  :default => 2,  :unsigned => true
-          t.integer   :loot_cycle,     :limit => 1,  :default => 0,  :unsigned => true
-          t.decimal   :latitude,       :null => true, :precision => 10, :scale => 7
-          t.decimal   :longitude,      :null => true, :precision => 10, :scale => 7
-          t.integer   :action_id
-          t.string    :target,         :limit => 32, :collation => :ascii_bin, :charset => :ascii
-          t.integer   :last_action_id
-          t.string    :last_target,    :limit => 32, :collation => :ascii_bin, :charset => :ascii
-          t.timestamps
-        end
+    arm_install do |m|
+      m.create_table table_name do |t|
+        t.integer   :floor,          :limit => 1,  :default => 0,  :unsigned => false
+        t.integer   :loot_mode,      :limit => 1,  :default => 2,  :unsigned => true
+        t.integer   :loot_cycle,     :limit => 1,  :default => 0,  :unsigned => true
+        t.decimal   :latitude,       :null => true, :precision => 10, :scale => 7
+        t.decimal   :longitude,      :null => true, :precision => 10, :scale => 7
+        t.integer   :action_id
+        t.string    :target,         :limit => 32, :collation => :ascii_bin, :charset => :ascii
+        t.integer   :last_action_id
+        t.string    :last_target,    :limit => 32, :collation => :ascii_bin, :charset => :ascii
+        t.timestamps :null => false
       end
     end
-    def self.upgrade_2
-      m = ActiveRecord::Migration.new
-      m.add_foreign_key table_name, :sl5_actions, :name => :all_party_actions,  :column => :action_id rescue nil
-      m.add_foreign_key table_name, :sl5_actions, :name => :last_party_actions, :column => :last_action_id rescue nil
+    arm_install('Ricer4::Plugins::Shadowlamb::Core::Action' => 1) do |m|
+      m.add_foreign_key table_name, :sl5_actions, :name => :all_party_actions,  :column => :action_id
+      m.add_foreign_key table_name, :sl5_actions, :name => :last_party_actions, :column => :last_action_id
     end
     
     ###

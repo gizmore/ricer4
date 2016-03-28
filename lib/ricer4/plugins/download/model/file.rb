@@ -3,9 +3,7 @@ module Ricer4::Plugins::Download
     
     self.table_name = "download_files"
     
-    def self.upgrade_1
-      return if table_exists?
-      m = ActiveRecord::Migration
+    arm_install do |m|
       m.create_table table_name do |t|
         t.string :name, :null => false, :default => nil
         t.timestamps :null => false

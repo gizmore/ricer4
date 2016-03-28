@@ -13,23 +13,16 @@ module Ricer4::Plugins::Shadowlamb::Core
     ###############
     ### Install ###
     ###############
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.integer :player_id,       :null => false
-          t.integer :knowledge_id,    :null => false
-          t.string  :knowledge_type,  :null => false, :limit => 128, :charset => :ascii, :collation => :ascii_bin
+    arm_install('Ricer4::Plugins::Shadowlamb::Core::Player' => 1) do |m|
+      m.create_table table_name do |t|
+        t.integer :player_id,       :null => false
+        t.integer :knowledge_id,    :null => false
+        t.string  :knowledge_type,  :null => false, :limit => 128, :charset => :ascii, :collation => :ascii_bin
 #          t.boolean :visited,         :null => false, :default => false
-          t.foreign_key :sl5_players, :name => :knowledge_players, :column => :player_id
-        end
+        t.foreign_key :sl5_players, :name => :knowledge_players, :column => :player_id
       end
+      m.add_index table_name, [:player_id, :knowledge_type], :name => :quick_knowledge_index
     end
-    def self.upgrade_2
-      m = ActiveRecord::Migration.new
-      m.add_index table_name, [:player_id, :knowledge_type], :name => :quick_knowledge_index rescue nil
-    end
-    
     
     ##############
     ### Events ###

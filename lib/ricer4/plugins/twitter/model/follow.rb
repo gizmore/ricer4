@@ -10,9 +10,7 @@ module Ricer4::Plugins::Twitter
       
       abbonementable_by([Ricer4::User, Ricer4::Channel])
   
-      def self.upgrade_1
-        return if table_exists?
-        m = ActiveRecord::Migration
+      arm_install do |m|
         m.create_table table_name do |t|
           t.string    :name,          :null => false
           t.integer   :user_id,       :null => true
@@ -28,10 +26,13 @@ module Ricer4::Plugins::Twitter
           t.timestamp :created_at,    :null => false
           t.timestamp :updated_at,    :null => false
         end
-        m.add_index       table_name, :name,  :unique => true
-        m.add_foreign_key table_name, :users, :on_delete => :nullify
+        m.add_index  table_name, :name,  :unique => true
       end
 
+      arm_install('Ricer4::User' => 1) do |m|
+        m.add_foreign_key table_name, :arm_users, :column => :user_id, :on_delete => :nullify
+      end
+      
       before_save :strip_mb4
 
       def strip_mb4

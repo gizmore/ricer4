@@ -21,9 +21,7 @@ module Ricer4::Plugins::Rss
     def self.enabled; where('feeds.deleted_at IS NULL'); end
     def self.deleted; where('feeds.deleted_at IS NOT NULL'); end
     
-    def self.upgrade_1
-      return if table_exists?
-      m = ActiveRecord::Migration
+    arm_install do |m|
       m.create_table table_name do |t|
         t.integer   :user_id,     :null => true
         t.string    :name,        :null => false, :unique => true, :charset => :ascii, :collate => :ascii_bin
@@ -35,14 +33,13 @@ module Ricer4::Plugins::Rss
         t.datetime  :deleted_at,  :null => true,  :default => nil
         t.timestamps :null => false
       end
-      m.add_index       table_name, :name,  :name => :feeds_name_index
-      m.add_foreign_key table_name, :users, :name => :feed_users_f_key, :on_delete => :nullify
-    end
-    
-    def bot
-      Ricer4::Bot.instance
+      m.add_index table_name, :name,  :name => :feeds_name_index
     end
 
+    arm_install('Ricer4::User' => 1) do |m|
+      m.add_foreign_key table_name, :arm_users, :column => :user_id, :name => :feed_users_f_key, :on_delete => :nullify
+    end
+    
     search_syntax do
       search_by :text do |scope, phrases|
         columns = [:url, :name, :title, :description]

@@ -2,10 +2,12 @@ module Ricer4::Plugins::Shadowlamb::Core
   class ValueName < ActiveRecord::Base
     
     self.table_name = 'sl5_value_names'
-    arm_cache; def should_cache?; true; end
+
+    arm_cache
+
+    arm_events
 
     include Include::Base
-    arm_events
     include Include::Crafting
     include Include::Translates
 
@@ -17,14 +19,11 @@ module Ricer4::Plugins::Shadowlamb::Core
     def max_bonus; get_config(:max_bonus); end
     def max_adjusted; get_config(:max_adjusted); end
 
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.string :name, :null => false, :limit => 32, :collation => :ascii_bin, :charset => :ascii
-        end
-        m.add_index table_name, :name, :unique => true, :name => :unique_value_names
+    arm_install do |m|
+      m.create_table table_name do |t|
+        t.string :name, :null => false, :limit => 32, :collation => :ascii_bin, :charset => :ascii
       end
+      m.add_index table_name, :name, :unique => true, :name => :unique_value_names
     end
 
     # All Overrides #

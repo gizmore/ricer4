@@ -7,13 +7,10 @@ module Ricer4::Plugins::Shadowlamb::Core
 
     belongs_to :player, :class_name => Player.name
     
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.integer :player_id, :null => false
-          t.foreign_key :sl5_players, :name => :affected_players, :column => :player_id
-        end
+    arm_install('Ricer4::Plugins::Shadowlamb::Core::Player' => 1) do |m|
+      m.create_table table_name do |t|
+        t.integer :player_id, :null => false
+        t.foreign_key :sl5_players, :name => :affected_players, :column => :player_id
       end
     end
     

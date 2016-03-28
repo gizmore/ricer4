@@ -1,8 +1,7 @@
 module Ricer4::Plugins::Log
-  class Binlog
+  class Binlog < ActiveRecord::Base
     
-    def self.upgrade_1
-      m = ActiveRecord::Migration
+    arm_install do |m|
       m.create_table :binlogs do |t|
         t.integer  :user_id
         t.integer  :channel_id

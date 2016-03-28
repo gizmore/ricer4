@@ -8,14 +8,10 @@ module Ricer4::Plugins::Shadowlamb::Core
     self.table_name = 'sl5_actions'
 
     arm_cache
-    def should_cache?; true; end
 
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.string :name, :null => false, :limit => 32, :collation => :ascii_bin, :charset => :ascii
-        end
+    arm_install do |m|
+      m.create_table table_name do |t|
+        t.string :name, :null => false, :limit => 32, :collation => :ascii_bin, :charset => :ascii
       end
     end
 

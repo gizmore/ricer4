@@ -4,7 +4,7 @@ module Ricer4::Plugins::Shadowlamb::Core
     self.table_name = 'sl5_players'
     
     arm_cache
-    def should_cache?; !is_abstract?; end #user.nil? || user.online; end
+    def arm_cache?; !is_abstract?; end #user.nil? || user.online; end
 
     def self.dont_store_values; true; end
 
@@ -49,32 +49,28 @@ module Ricer4::Plugins::Shadowlamb::Core
     
     delegate :is_alone?, :is_fighting?, :action_is?, :location, :area, :target_object, :other_party, :enemy_party, :to => :party
     
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.integer   :npc_id,     :null => true,  :default => nil
-          t.integer   :user_id,    :null => true,  :default => nil
-          t.integer   :race_id,    :null => false
-          t.integer   :gender_id,  :null => false
-          t.integer   :party_id,   :null => true
-          t.boolean   :runner,     :null => true,  :default => nil
-          t.string    :playername, :null => true,  :default => nil, :limit => 48
-          t.timestamp :party_updated_at, :null => true
-          t.timestamps :null => false
-        end
+    arm_install do |m|
+      m.create_table table_name do |t|
+        t.integer   :npc_id,     :null => true,  :default => nil
+        t.integer   :user_id,    :null => true,  :default => nil
+        t.integer   :race_id,    :null => false
+        t.integer   :gender_id,  :null => false
+        t.integer   :party_id,   :null => true
+        t.boolean   :runner,     :null => true,  :default => nil
+        t.string    :playername, :null => true,  :default => nil, :limit => 48
+        t.timestamp :party_updated_at, :null => true
+        t.timestamps :null => false
       end
     end
-    def self.upgrade_2
-      if self.name == "Ricer4::Plugins::Shadowlamb::Core::Player"
-        m = ActiveRecord::Migration.new
-        m.add_index       table_name, :party_id,    :name => :player_party rescue nil
-        m.add_foreign_key table_name, :users,       :name => :player_users,   :column => :user_id rescue nil
-        m.add_foreign_key table_name, :sl5_npcs,    :name => :player_npcs,    :column => :npc_id rescue nil
-        m.add_foreign_key table_name, :sl5_races,   :name => :player_races,   :column => :race_id rescue nil
-        m.add_foreign_key table_name, :sl5_genders, :name => :player_genders, :column => :gender_id rescue nil
-        m.add_foreign_key table_name, :sl5_parties, :name => :player_parties, :column => :party_id rescue nil
-      end
+    arm_install('Ricer4::User' => 1, 'Ricer4::Plugins::Shadowlamb::Core::NpcName' => 1, 'Ricer4::Plugins::Shadowlamb::Core::Race' => 1, 'Ricer4::Plugins::Shadowlamb::Core::Gender' => 1, 'Ricer4::Plugins::Shadowlamb::Core::Party' => 1) do |m|
+#      if self.name == "Ricer4::Plugins::Shadowlamb::Core::Player"
+        m.add_index       table_name, :party_id,    :name => :player_party
+        m.add_foreign_key table_name, :users,       :name => :player_users,   :column => :user_id
+        m.add_foreign_key table_name, :sl5_npcs,    :name => :player_npcs,    :column => :npc_id
+        m.add_foreign_key table_name, :sl5_races,   :name => :player_races,   :column => :race_id
+        m.add_foreign_key table_name, :sl5_genders, :name => :player_genders, :column => :gender_id
+        m.add_foreign_key table_name, :sl5_parties, :name => :player_parties, :column => :party_id
+#      end
     end
     
     def name; self.user.name; end

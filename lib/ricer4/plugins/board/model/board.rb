@@ -15,9 +15,7 @@ module Ricer4::Plugins::Board
       scope :enabled, -> { where("#{table_name}.deleted_at IS NULL") }
       scope :disabled, -> { where("#{table_name}.deleted_at IS NOT NULL") }
   
-      def self.upgrade_1
-        return if table_exists?
-        m = ActiveRecord::Migration.new
+      arm_install do |m|
         m.create_table table_name do |t|
           t.string    :name,         :null => false, :length => 24, :charset => :ascii, :collation => :ascii_bin
           t.string    :url,          :null => false

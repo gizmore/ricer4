@@ -3,7 +3,7 @@ module Ricer4::Plugins::Shadowlamb::Core
   
     self.table_name = 'sl5_races'
 
-    arm_cache; def should_cache?; true; end
+    arm_cache
     
     include Include::Base
     include Include::Dice
@@ -14,17 +14,11 @@ module Ricer4::Plugins::Shadowlamb::Core
     ###############
     ### Install ###
     ###############
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.string :name, :null => false, :limit => 32, :collation => :ascii_bin, :charset => :ascii
-        end
+    arm_install do |m|
+      m.create_table table_name do |t|
+        t.string :name, :null => false, :limit => 32, :collation => :ascii_bin, :charset => :ascii
       end
-    end
-    def self.upgrade_2
-      m = ActiveRecord::Migration.new
-      m.add_index table_name, :name, :unique => true, :name => :unique_race_names rescue nil
+      m.add_index table_name, :name, :unique => true, :name => :unique_race_names
     end
 
     ##    

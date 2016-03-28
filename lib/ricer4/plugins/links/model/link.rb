@@ -10,9 +10,7 @@ module Ricer4::Plugins::Links
       ###############
       ### Install ###
       ###############
-      def self.upgrade_1
-        return if table_exists?
-        m = ActiveRecord::Migration
+      arm_install do |m|
         m.create_table table_name do |t|
           t.string    :url,          :null => false, :unique => true
           t.string    :title,        :null => true
@@ -25,7 +23,7 @@ module Ricer4::Plugins::Links
         end
       end
       
-      def self.upgrade_2
+      arm_install do |m|
         self.mkdir
       end
   

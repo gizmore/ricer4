@@ -3,21 +3,15 @@ module Ricer4::Plugins::Shadowlamb::Core
   
     self.table_name = 'sl5_npcs'
     
-    arm_cache; def should_cache?; true; end
+    arm_cache
     
     include Include::Base
     
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.string :npc_path, :null => false, :limit => 96, :collation => :ascii_bin, :charset => :ascii
-        end
+    arm_install do |m|
+      m.create_table table_name do |t|
+        t.string :npc_path, :null => false, :limit => 96, :collation => :ascii_bin, :charset => :ascii
       end
-    end
-    def self.upgrade_2
-      m = ActiveRecord::Migration.new
-      m.add_index table_name, :npc_path, :unique => true, :name => :unique_npc_pathes rescue nil
+      m.add_index table_name, :npc_path, :unique => true, :name => :unique_npc_pathes
     end
    
     def self.register_npc(npc_path, npc_klass)

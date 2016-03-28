@@ -14,10 +14,8 @@ module Ricer4::Plugins::Bash
     
     ###############
     ### Install ###
-    ###############    
-    def self.upgrade_1
-      return if table_exists?
-      m = ActiveRecord::Migration
+    ###############
+    arm_install do |m|
       m.create_table table_name do |t|
         t.integer   :cite_id,    :null => false, :unsigned => true 
         t.integer   :provider,   :null => false, :unsigned => true, :length => 2

@@ -5,22 +5,17 @@ module Ricer4::Plugins::Shadowlamb::Core
     include Include::Translates
 
     self.table_name = 'sl5_words'
-    arm_cache; def should_cache?; true; end
+
+    arm_cache
 
     ###############
     ### Install ###
-    ###############    
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.string  :name, :limit => 32, :null => false, :collation => :ascii_bin, :charset => :ascii
-        end
+    ###############   
+    arm_install do |m| 
+      m.create_table table_name do |t|
+        t.string  :name, :limit => 32, :null => false, :collation => :ascii_bin, :charset => :ascii
       end
-    end
-    def self.upgrade_2
-      m = ActiveRecord::Migration.new
-      m.add_index table_name, :name, :unique => true, :name => :unique_word_names rescue nil
+      m.add_index table_name, :name, :unique => true, :name => :unique_word_names
     end
     
     def self.hello

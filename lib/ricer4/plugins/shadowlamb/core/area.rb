@@ -11,22 +11,16 @@ module Ricer4::Plugins::Shadowlamb::Core
     arm_events
     
     self.table_name = 'sl5_areas'
-    arm_cache; def should_cache?; true; end
+    arm_cache
 
     ###############
     ### Install ###
     ###############
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.string :name, :limit => 128, :null => false, :charset => :ascii, :collation => :ascii_bin
-        end
+    arm_install do |m|
+      m.create_table table_name do |t|
+        t.string :name, :limit => 128, :null => false, :charset => :ascii, :collation => :ascii_bin
       end
-    end
-    def self.upgrade_2
-      m = ActiveRecord::Migration.new
-      m.add_index table_name, :name, :unique => true, :name => :unique_area_names rescue nil
+      m.add_index table_name, :name, :unique => true, :name => :unique_area_names
     end
     
     ##############

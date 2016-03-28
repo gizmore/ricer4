@@ -5,15 +5,16 @@ module Ricer4::Plugins::Irc
     
     self.table_name = "server_motds"
     
-    def self.upgrade_1
-      return if table_exists?
-      m = ActiveRecord::Migration
+    arm_install do |m|
       m.create_table table_name do |t|
         t.integer    :server_id,    :default => nil, :null => false, :unsigned => true, :unique => true
         t.text       :text,         :default => nil, :null => true
         t.timestamp  :updated_at,   :default => nil, :null => false
       end
-      m.add_foreign_key table_name, :servers, :on_delete => :cascade
+    end
+    
+    arm_install('Ricer4::Server' => 1) do |m|
+      m.add_foreign_key table_name, :ricer_servers, :column => :server_id, :on_delete => :cascade
     end
     
     def server
@@ -28,7 +29,6 @@ module Ricer4::Plugins::Irc
     def self.for_server(server)
       find_or_create_by!(:server_id => server.id)
     end
-
     
   end
 end

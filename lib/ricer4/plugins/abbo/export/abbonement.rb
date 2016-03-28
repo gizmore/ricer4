@@ -4,18 +4,14 @@ module Ricer4::Plugins::Abbo
     belongs_to :abbo_item,   :class_name => 'Ricer4::Plugins::Abbo::AbboItem'
     belongs_to :abbo_target, :class_name => 'Ricer4::Plugins::Abbo::AbboTarget'
     
-    def self.upgrade_1
-      unless table_exists?
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.integer :abbo_item_id,   :null => false
-          t.integer :abbo_target_id, :null => false
-          t.timestamps :null => false
-        end
-        m = ActiveRecord::Migration.new
-        m.add_index table_name, :abbo_item_id,   :name => :abbo_item_index
-        m.add_index table_name, :abbo_target_id, :name => :abbo_target_index
+    arm_install do |m|
+      m.create_table table_name do |t|
+        t.integer :abbo_item_id,   :null => false
+        t.integer :abbo_target_id, :null => false
+        t.timestamps :null => false
       end
+      m.add_index table_name, :abbo_item_id,   :name => :abbo_item_index
+      m.add_index table_name, :abbo_target_id, :name => :abbo_target_index
     end
     
     def self.for_target(target)

@@ -2,12 +2,9 @@ module Ricer4::Plugins::Shadowlamb::Core
   class Quest < ActiveRecord::Base
 
     self.table_name = 'sl5_quests'
-    arm_cache; def should_cache?; true; end
-    def global_cache_key; "#{self.name}"; end
-    def self.by_name(quest_name)
-      quest_name = quest_name.to_s.camelize.gsub('/', '::')
-      (global_cache[quest_name] || self.where(:name => quest_name).first) or raise Ricer4::ConfigException.new("Unknown quest: #{quest_name}")
-    end
+
+    arm_cache
+    arm_named_cache :name, Proc.new{|values|values[:name].to_s.camelize.gsub('/', '::')}
     
     arm_events
 
@@ -34,17 +31,11 @@ module Ricer4::Plugins::Shadowlamb::Core
     ###############
     ### Install ###
     ###############
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.string :name, :null => false, :limit => 128, :collation => :ascii_bin, :charset => :ascii
-        end
+    arm_install do |m|
+      m.create_table table_name do |t|
+        t.string :name, :null => false, :limit => 128, :collation => :ascii_bin, :charset => :ascii
       end
-    end
-    def self.upgrade_2
-      m = ActiveRecord::Migration.new
-      m.add_index table_name, :name, :unique => true, :name => :unique_quest_names rescue nil
+      m.add_index table_name, :name, :unique => true, :name => :unique_quest_names
     end
     
     def self.install

@@ -45,9 +45,10 @@ module Ricer4
     end
       
     def load_plugin_dir(directory)
-#      bot.log.debug{"Ricer4::PluginLoader.load_plugin_dir(#{directory})"}
+      #bot.log.debug{"Ricer4::PluginLoader.load_plugin_dir(#{directory})"}
       load_rb_dir("#{directory}/model")
       Filewalker.proc_files(directory, '*.rb') do |file|
+        #bot.log.debug{"Load #{file}"}
         load file
       end
       load_rb_dir("#{directory}/commands")
@@ -56,6 +57,7 @@ module Ricer4
     def load_rb_dir(directory)
       if File.directory?(directory)
         Filewalker.traverse_files(directory, '*.rb') do |file|
+          #bot.log.debug{"Load #{file}"}
           load file
         end
       end

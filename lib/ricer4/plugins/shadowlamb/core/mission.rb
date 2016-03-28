@@ -2,7 +2,8 @@ module Ricer4::Plugins::Shadowlamb::Core
   class Mission < ActiveRecord::Base
 
     self.table_name = 'sl5_missions'
-#    arm_cache; def should_cache?; true; end
+
+    # arm_cache
 
     include Include::Base
     include Include::Translates
@@ -20,23 +21,19 @@ module Ricer4::Plugins::Shadowlamb::Core
     ###############
     ### Install ###
     ###############
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.integer :quest_id,  :null => false
-          t.integer :player_id, :null => false
-          t.integer :status,    :null => false, :limit => 1, :unsigned => true, :default => 1
-          t.timestamps :null => false
-        end
+    arm_install do |m|
+      m.create_table table_name do |t|
+        t.integer :quest_id,  :null => false
+        t.integer :player_id, :null => false
+        t.integer :status,    :null => false, :limit => 1, :unsigned => true, :default => 1
+        t.timestamps :null => false
       end
+      m.add_index table_name, [:player_id, :quest_id], :name => :players_missions, :unique => true
     end
 
-    def self.upgrade_2
-      m = ActiveRecord::Migration.new
-      m.add_foreign_key table_name, :sl5_quests,  :name => :mission_quest,    :column => :quest_id,  :on_delete => :cascade rescue nil
-      m.add_foreign_key table_name, :sl5_players, :name => :mission_player,   :column => :player_id, :on_delete => :cascade rescue nil
-      m.add_index       table_name, [:player_id, :quest_id], :name => :players_missions, :unique => true rescue nil
+    arm_install('Ricer4::Plugins::Shadowlamb::Core::Quest' => 1, 'Ricer4::Plugins::Shadowlamb::Core::Player' => 1) do |m|
+      m.add_foreign_key table_name, :sl5_quests,  :name => :mission_quest,  :column => :quest_id,  :on_delete => :cascade
+      m.add_foreign_key table_name, :sl5_players, :name => :mission_player, :column => :player_id, :on_delete => :cascade
     end
     
     #############

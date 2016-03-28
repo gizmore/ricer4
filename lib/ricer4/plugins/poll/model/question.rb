@@ -14,10 +14,7 @@ module Ricer4::Plugins::Poll
     validates :text, length:     { minimum:8, maximum:MAXLEN }
     validates :text, similarity: { maximum:0.8 }#, :except => "self.type == #{RATE}"
     
-    # Ricer Plugins can install themself. So what?
-    def self.upgrade_1
-      return if table_exists?
-      m = ActiveRecord::Migration.new
+    arm_install do |m|
       m.create_table table_name do |t|
         t.integer    :user_id,   :null => false
         t.integer    :poll_type, :null => false, :limit => 1

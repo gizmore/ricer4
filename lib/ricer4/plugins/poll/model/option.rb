@@ -18,9 +18,7 @@ module Ricer4::Plugins::Poll
       greater_than_or_equal_to: 1, less_than_or_equal_to: 10, only_integer: true },
       :unless => Proc.new { |option| option.question.poll_type != Question::RATE }
     
-    def self.upgrade_1
-      return if table_exists?
-      m = ActiveRecord::Migration.new
+    arm_install do |m|
       m.create_table table_name do |t|
         t.integer  :question_id, :null => false
         t.string   :choice,      :null => true, :length => MAXLEN

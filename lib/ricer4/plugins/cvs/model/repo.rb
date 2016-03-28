@@ -13,9 +13,7 @@ module Ricer4::Plugins::Cvs
     
     scope :working, -> { where('revision IS NOT NULL') }
     
-    def self.upgrade_1
-      return if table_exists?
-      m = ActiveRecord::Migration.new
+    arm_install do |m|
       m.create_table table_name do |t|
         t.string  :name,     :null => false, :length => 32
         t.string  :url,      :null => false

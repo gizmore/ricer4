@@ -3,13 +3,10 @@ module Ricer4::Plugins::Abbo
     
     belongs_to :item, :polymorphic => true
     
-    def self.upgrade_1
-      unless table_exists?
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.integer :item_id,   :null => false
-          t.string  :item_type, :null => false, :charset => :ascii, :collation => :ascii_bin
-        end
+    arm_install do |m|
+      m.create_table table_name do |t|
+        t.integer :item_id,   :null => false
+        t.string  :item_type, :null => false, :charset => :ascii, :collation => :ascii_bin
       end
     end
     

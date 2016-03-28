@@ -6,9 +6,7 @@ module Ricer4::Plugins::Todo
   
       self.table_name = 'todo_entries';
       
-      def self.upgrade_1
-        return if table_exists?
-        m = ActiveRecord::Migration
+      arm_install do |m|
         m.create_table self.table_name do |t|
           t.string    :text,       :null => false
           t.integer   :priority,   :null => false, :default => 0,  :limit => 3

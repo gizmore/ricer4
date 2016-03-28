@@ -1,44 +1,11 @@
+load File.expand_path("../shadowmodules.rb", __FILE__)
 load File.expand_path("../shadowthreads.rb", __FILE__)
+
 module Ricer4::Plugins::Shadowlamb
-  
-  # Ugly loader compat for Ricer2 :(
-  # SHADOWDIR ||= File.dirname(__FILE__)
-  # module Core; end
-  # module Core::Help; end
-  # module Core::Loader; end
-  # module Core::Locations; end
-  # module Core::Genders; end
-  # module Core::Races; end
-  # module Core::Ai; end
-  # module Core::Actions; end
-  # module Core::Spells; end
-  # module Core::Professions; end
-  # module Core::Include; end
-  # module Core::Extend; end
-  # module Core::Areas; end
-  # module Core::Areas::Extend; end
-  # module Core::ValueType; end
-  # module World; end
-# 
-  # Filewalker.traverse_files(SHADOWDIR+"/core/include", '*.rb') do |path|
-    # load path
-  # end
-  # Filewalker.traverse_files(SHADOWDIR+"/export", '*.rb') do |path|
-    # load path
-  # end
-# 
-  # Filewalker.traverse_files(SHADOWDIR+"/core/extend", '*.rb') do |path|
-    # load path
-  # end
-  # Filewalker.traverse_files(SHADOWDIR+"/core/items", '*.rb') do |path|
-    # load path
-  # end
-  # Filewalker.traverse_files(SHADOWDIR+"/core", '*.rb') do |path|
-    # load path
-  # end
-  
   class Shadowlamb < Ricer4::Plugin
     
+    SHADOWDIR ||= File.dirname(__FILE__)
+
     include Shadowthreads
     
     def shadowlamb_version; 5.0; end
@@ -108,32 +75,45 @@ module Ricer4::Plugins::Shadowlamb
       # end
     end
     
-    def upgrade_1
-      active_record_classes do |klass|; klass.upgrade_1; end
-    end
-    def upgrade_2
-      active_record_classes do |klass|; klass.upgrade_2 if klass.respond_to?(:upgrade_2); end
-    end
-    
     def load_shadowlamb
+      load_shadowlamb_code
       install_data_set
       load_ai
       load_area_helpers
       mob_factory.plugin_reload
       Ricer4::Plugins::Shadowlamb::Core::Loader::World.instance.load_world
       broadcast('world/loaded')
-      load_core
+#      load_core
       # Kick it!
 #      factory.startup_active_parties
     end
-    
-    def core_dir; File.dirname(__FILE__)+'/core'; end
-    def load_core
-      Filewalker.proc_files(core_dir, '*.rb') do |path|
-        klass_name = path.rsubstr_from('/')[0..-4].camelize
-        Object.const_get("Ricer4::Plugins::Shadowlamb::Core::#{klass_name}")
+
+    def load_shadowlamb_code
+      Filewalker.traverse_files(SHADOWDIR+"/core/include", '*.rb') do |path|
+        load path
+      end
+  #    Filewalker.traverse_files(SHADOWDIR+"/export", '*.rb') do |path|
+  #      load path
+  #    end
+      Filewalker.traverse_files(SHADOWDIR+"/core/extend", '*.rb') do |path|
+        load path
+      end
+      Filewalker.traverse_files(SHADOWDIR+"/core/items", '*.rb') do |path|
+        load path
+      end
+      Filewalker.traverse_files(SHADOWDIR+"/core", '*.rb') do |path|
+        load path
       end
     end
+  
+    
+    # def core_dir; File.dirname(__FILE__)+'/core'; end
+    # def load_core
+      # Filewalker.proc_files(core_dir, '*.rb') do |path|
+        # klass_name = path.rsubstr_from('/')[0..-4].camelize
+        # Object.const_get("Ricer4::Plugins::Shadowlamb::Core::#{klass_name}")
+      # end
+    # end
     
     def install_data_set
       active_record_classes do |klass|

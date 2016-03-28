@@ -7,22 +7,17 @@ module Ricer4::Plugins::Shadowlamb::Core
     attr_accessor :stackable
 
     self.table_name = 'sl5_item_names'
-    arm_cache; def should_cache?; true; end
+
+    arm_cache
 
     ###############
     ### Install ###
     ###############
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.string :name, :null => false, :limit => 64, :collation => :ascii_bin, :charset => :ascii
-        end
+    arm_install do |m|
+      m.create_table table_name do |t|
+        t.string :name, :null => false, :limit => 64, :collation => :ascii_bin, :charset => :ascii
       end
-    end
-    def self.upgrade_2
-      m = ActiveRecord::Migration.new
-      m.add_index table_name, :name, :unique => true, :name => :unique_item_names rescue nil
+      m.add_index table_name, :name, :unique => true, :name => :unique_item_names
     end
     
     ############

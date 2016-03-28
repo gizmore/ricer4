@@ -21,10 +21,8 @@ module Ricer4::Plugins::Auth
     # Cleanup once in a while    
     after_commit -> { self.class.all.where("expires < ?", Time.now).delete_all }
 
-    # Table layout in ricer plugin style 
-    def self.upgrade_1
-      return if table_exists?
-      m = ActiveRecord::Migration
+    # Table layout in ricer plugin style
+    arm_install('Ricer4::User' => 1) do |m|
       m.create_table table_name do |t|
         t.integer   :user_id,     :null => false
         t.integer   :confirmtype, :null => false, :length => 1,  :unsigned => true

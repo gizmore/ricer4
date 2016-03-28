@@ -8,10 +8,6 @@ module Ricer4::Plugins::Paste
 #   def execute_with_language(programming_language)
 #   end
 
-    def upgrade_1
-      Pile::Record.upgrade_1
-    end
- 
     has_usage '<message>'
     def execute(content)
       execute_upload(content)

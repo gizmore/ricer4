@@ -15,9 +15,7 @@ module Ricer4::Plugins::Quote
     ###############
     ### Install ###
     ###############    
-    def self.upgrade_1
-      return if table_exists?
-      m = ActiveRecord::Migration
+    arm_install do |m|
       m.create_table table_name do |t|
         t.integer   :user_id,    :null => false
         t.integer   :channel_id, :null => true

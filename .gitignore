@@ -10,6 +10,7 @@
 # gizmore
 .project
 .byebug_history
+/files/
 /vendor/
 /log/
 *.yml

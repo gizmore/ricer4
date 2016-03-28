@@ -29,23 +29,19 @@ module Ricer4::Plugins::Shadowlamb::Core
     ###############
     ### Install ###
     ###############    
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.integer   :item_name_id, :null => false
-          t.integer   :item_list_id, :null => false
-          t.integer   :amount,       :null => false, :default => 1, :limit => 5, :unsigned => true
-          t.timestamp :updated_at
-        end
+    arm_install do |m|
+      m.create_table table_name do |t|
+        t.integer   :item_name_id, :null => false
+        t.integer   :item_list_id, :null => false
+        t.integer   :amount,       :null => false, :default => 1, :limit => 5, :unsigned => true
+        t.timestamp :updated_at
       end
     end
-    def self.upgrade_2
-      if self.name == "Ricer4::Plugins::Shadowlamb::Core::Item"
-        m = ActiveRecord::Migration.new
-        m.add_foreign_key table_name, :sl5_item_names, :name => :fk_item_names, :column => :item_name_id rescue nil
-        m.add_foreign_key table_name, :sl5_item_lists, :name => :fk_item_lists, :column => :item_list_id rescue nil
-      end
+    arm_install('Ricer4::Plugins::Shadowlamb::Core::ItemName' => 1, 'Ricer4::Plugins::Shadowlamb::Core::ItemList' => 1) do |m|
+#      if self.name == "Ricer4::Plugins::Shadowlamb::Core::Item"
+        m.add_foreign_key table_name, :sl5_item_names, :name => :fk_item_names, :column => :item_name_id
+        m.add_foreign_key table_name, :sl5_item_lists, :name => :fk_item_lists, :column => :item_list_id
+ #     end
     end
 
     ###############

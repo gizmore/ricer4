@@ -16,9 +16,7 @@ module Ricer4::Plugins::Note
     
     validates :message, :length => { minimum: 1, maximum: 1024 }
         
-    def self.upgrade_1
-      return if table_exists?
-      m = ActiveRecord::Migration
+    arm_install do |m|
       m.create_table table_name do |t|
         t.integer   :sender_id,    :null => false
         t.integer   :receiver_id,  :null => true
@@ -26,8 +24,11 @@ module Ricer4::Plugins::Note
         t.datetime  :read_at,      :null => true
         t.timestamp :created_at,   :null => false
       end
-      m.add_foreign_key table_name, :users,       :name => :note_senders,   :column => :sender_id,   :on_delete => :cascade 
-      m.add_foreign_key table_name, :users,       :name => :note_receivers, :column => :receiver_id, :on_delete => :cascade 
+    end
+
+    arm_install do |m|
+      m.add_foreign_key table_name, :arm_users,   :name => :note_senders,   :column => :sender_id,   :on_delete => :cascade 
+      m.add_foreign_key table_name, :arm_users,   :name => :note_receivers, :column => :receiver_id, :on_delete => :cascade 
       m.add_index       table_name, :sender_id,   :name => :note_sender_index
       m.add_index       table_name, :receiver_id, :name => :note_receiver_index
     end

@@ -12,22 +12,19 @@ module Ricer4::Plugins::Shadowlamb::Core
     delegate :value_key, :short_label, :to_label, :computed?, :default, :to => :value_name
     delegate :section, :to => :value_klass
     
-    def self.upgrade_1
-      unless ActiveRecord::Base.connection.table_exists?(table_name)
-        m = ActiveRecord::Migration.new
-        m.create_table table_name do |t|
-          t.integer :value_name_id, :limit => 4,   :null => false, :unsigned => true
-          t.integer :owner_id,      :limit => 11,  :null => false
-          t.string  :owner_type,    :limit => 128, :null => false, :charset => :ascii, :collation => :ascii_bin
-          t.integer :base_value,    :limit => 5,   :default => 0
-          t.integer :bonus_value,   :limit => 5,   :default => 0
-        end
+    arm_install('Ricer4::Plugins::Shadowlamb::Core::ValueName' => 1) do |m|
+      m.create_table table_name do |t|
+        t.integer :value_name_id, :limit => 4,   :null => false, :unsigned => true
+        t.integer :owner_id,      :limit => 11,  :null => false
+        t.string  :owner_type,    :limit => 128, :null => false, :charset => :ascii, :collation => :ascii_bin
+        t.integer :base_value,    :limit => 5,   :default => 0
+        t.integer :bonus_value,   :limit => 5,   :default => 0
       end
+      m.add_index       table_name, [:owner_id, :owner_type], :name => :value_owners
     end
-    def self.upgrade_2
-      m = ActiveRecord::Migration.new
-      m.add_foreign_key table_name, :sl5_value_names,         :name => :value_names, :column => :value_name_id rescue nil
-      m.add_index       table_name, [:owner_id, :owner_type], :name => :value_owners rescue nil
+
+    arm_install('Ricer4::Plugins::Shadowlamb::Core::ValueName' => 1) do |m|
+      m.add_foreign_key table_name, :sl5_value_names, :name => :value_names, :column => :value_name_id
     end
 
     def section_is?(section)
