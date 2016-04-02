@@ -64,7 +64,7 @@ module Ricer4::Plugins::Shadowlamb::Core
     end
     arm_install('Ricer4::User' => 1, 'Ricer4::Plugins::Shadowlamb::Core::NpcName' => 1, 'Ricer4::Plugins::Shadowlamb::Core::Race' => 1, 'Ricer4::Plugins::Shadowlamb::Core::Gender' => 1, 'Ricer4::Plugins::Shadowlamb::Core::Party' => 1) do |m|
       m.add_index       table_name, :party_id,    :name => :player_party
-      m.add_foreign_key table_name, :arm_users,   :name => :player_users,   :column => :user_id
+      m.add_foreign_key table_name, :ricer_users,   :name => :player_users,   :column => :user_id
       m.add_foreign_key table_name, :sl5_npcs,    :name => :player_npcs,    :column => :npc_id
       m.add_foreign_key table_name, :sl5_races,   :name => :player_races,   :column => :race_id
       m.add_foreign_key table_name, :sl5_genders, :name => :player_genders, :column => :gender_id

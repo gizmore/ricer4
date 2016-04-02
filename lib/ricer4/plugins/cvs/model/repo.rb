@@ -93,11 +93,11 @@ module Ricer4::Plugins::Cvs
     ### Display ###
     ###############
     def display_show_item(num)
-      I18n.t 'ricer3.plugins.cvs.msg_show_item', repo_id:self.id, name:self.name, path:self.uri.path, url:self.url
+      I18n.t 'ricer4.plugins.cvs.msg_show_item', repo_id:self.id, name:self.name, path:self.uri.path, url:self.url
     end
     
     def display_list_item(num)
-      I18n.t 'ricer3.plugins.cvs.msg_show_list_item', repo_id:self.id, name:self.name
+      I18n.t 'ricer4.plugins.cvs.msg_show_list_item', repo_id:self.id, name:self.name
     end
     
     def revision_url(revision)

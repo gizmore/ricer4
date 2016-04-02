@@ -53,7 +53,7 @@ module Ricer4::Plugins::Todo
       end
   
       def show_item()
-        I18n.t!('.ricer3.plugins.todo.show_item',
+        I18n.t!('.ricer4.plugins.todo.show_item',
           id: self.id,
           text: self.text,
           creator: self.creator.display_name,
@@ -66,7 +66,7 @@ module Ricer4::Plugins::Todo
       end
   
       def list_item(number)
-        I18n.t('ricer3.plugins.todo.list_item',
+        I18n.t('ricer4.plugins.todo.list_item',
           id: number,
           text: self.text,
           creator: self.creator.display_name,
@@ -79,7 +79,7 @@ module Ricer4::Plugins::Todo
         display_item(number)
       end
       def display_item(number)
-        I18n.t('ricer3.plugins.todo.display_item',
+        I18n.t('ricer4.plugins.todo.display_item',
           n: number,
           id: self.id,
           text: self.text,
@@ -96,7 +96,7 @@ module Ricer4::Plugins::Todo
         else; key = 'created'
         end
         # key = self.done_at.nil? ? 'taken' : 'solved'
-        I18n.t("ricer3.plugins.todo.#{key}_item",
+        I18n.t("ricer4.plugins.todo.#{key}_item",
           n: self.id,
           id: self.id,
           text: self.text,

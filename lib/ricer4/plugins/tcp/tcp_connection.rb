@@ -53,7 +53,7 @@ module Ricer4::Plugins::Tcp
     end
     
     def netcat_usermask
-      "#{@user.name}!#{@ip}@tcp-ricer3"
+      "#{@user.name}!#{@ip}@tcp-ricer4"
     end
     
     def raw_message(msg)

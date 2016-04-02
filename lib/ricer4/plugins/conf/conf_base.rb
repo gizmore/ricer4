@@ -2,7 +2,7 @@ module Ricer4::Plugins::Conf
   class ConfBase < Ricer4::Plugin
   
     # override
-    def plugin_description(long); tt("ricer3.plugins.conf.conf.description"); end
+    def plugin_description(long); tt("ricer4.plugins.conf.conf.description"); end
     
     def config_channel
       channel

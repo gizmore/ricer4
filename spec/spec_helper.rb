@@ -1,7 +1,7 @@
+require 'byebug'
 require 'rubygems'
 require "bundler"
 require 'bundler/setup'
-require 'byebug'
 require 'ricer4'
 
 Bundler.setup

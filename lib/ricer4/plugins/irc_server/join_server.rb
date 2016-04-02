@@ -5,7 +5,7 @@ module Ricer4::Plugins::Irc
 
     permission_is :ircop
     
-    has_setting name: :default_nick, type: :irc_nickname, scope: :bot, permission: :responsible, default: bot.config.name
+    has_setting name: :default_nick, type: :irc_nickname, scope: :bot, permission: :responsible, default: bot.config.nickname
     
     has_usage  '<server_url> <boolean|named:"peer_verify",default:true>', function: :execute_create
     has_usage  '<server_url>', function: :execute_create

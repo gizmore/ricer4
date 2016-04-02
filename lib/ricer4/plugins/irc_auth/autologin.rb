@@ -42,7 +42,7 @@ module Ricer4::Plugins::Irc
       user = Ricer4::User.online.where(:nickname => username, server_id: server.id).first
       unless user.nil?
         user.login!
-        user.localize!.send_message(I18n.t('ricer3.plugins.auth.autologin.msg_logged_in'))
+        user.localize!.send_message(I18n.t('ricer4.plugins.auth.autologin.msg_logged_in'))
       end
     end
     

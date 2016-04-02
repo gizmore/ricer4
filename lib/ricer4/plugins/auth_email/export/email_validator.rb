@@ -15,7 +15,7 @@ class EmailValidator < ActiveModel::EachValidator
     end
   end
   def error(record, attribute, reason)
-    reason = I18n.t!("ricer3.param.email.err_#{reason}") rescue "did not pass the email #{reason} test"
+    reason = I18n.t!("ricer4.param.email.err_#{reason}") rescue "did not pass the email #{reason} test"
     record.errors.add(attribute, reason)
   end
 end

@@ -43,7 +43,7 @@ module Ricer4::Plugins::Bash
     end
     
     def announce_message(quote)
-      quote.display_item('ricer3.plugins.bash.announce.msg_new_quotes', nil)
+      quote.display_item('ricer4.plugins.bash.announce.msg_new_quotes', nil)
     end
   
   end

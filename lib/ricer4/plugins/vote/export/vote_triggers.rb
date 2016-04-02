@@ -69,8 +69,8 @@ module Ricer4::Extend::VoteTriggers
       def execute(id)
         item = vote_class.find(id)
         item.liked_by user
-        return reply I18n.t('ricer3.extender.vote_triggers.err_vote') unless item.vote_registered?
-        return reply I18n.t('ricer3.extender.vote_triggers.msg_voted')
+        return reply I18n.t('ricer4.extend.vote_triggers.err_vote') unless item.vote_registered?
+        return reply I18n.t('ricer4.extend.vote_triggers.msg_voted')
       end
       
     end
@@ -87,8 +87,8 @@ module Ricer4::Extend::VoteTriggers
       def execute(id)
         item = vote_class.find(id)
         item.disliked_by user
-        return reply I18n.t('ricer3.extender.vote_triggers.err_vote') unless item.vote_registered?
-        return reply I18n.t('ricer3.extender.vote_triggers.msg_voted')
+        return reply I18n.t('ricer4.extend.vote_triggers.err_vote') unless item.vote_registered?
+        return reply I18n.t('ricer4.extend.vote_triggers.msg_voted')
       end
     end
   end

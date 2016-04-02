@@ -30,7 +30,7 @@ module Ricer4::Plugins::Twitter
       end
 
       arm_install('Ricer4::User' => 1) do |m|
-        m.add_foreign_key table_name, :arm_users, :column => :user_id, :on_delete => :nullify
+        m.add_foreign_key table_name, :ricer_users, :column => :user_id, :on_delete => :nullify
       end
       
       before_save :strip_mb4
@@ -85,11 +85,11 @@ module Ricer4::Plugins::Twitter
       end
       
       def display_show_item(number)
-        I18n.t('ricer3.plugins.twitter.show_item', id:self.id, name:self.name, user:self.user.display_name, date:self.display_date)
+        I18n.t('ricer4.plugins.twitter.show_item', id:self.id, name:self.name, user:self.user.display_name, date:self.display_date)
       end
       
       def display_list_item(number)
-        I18n.t('ricer3.plugins.twitter.list_item', id:self.id, name:self.name)
+        I18n.t('ricer4.plugins.twitter.list_item', id:self.id, name:self.name)
       end
   
     end

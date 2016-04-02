@@ -46,7 +46,7 @@ module Ricer4::Plugins::Poll
     end
     
     ## Types
-    def type_label; I18n.t("ricer3.plugins.poll.type_#{self.poll_type}"); end
+    def type_label; I18n.t("ricer4.plugins.poll.type_#{self.poll_type}"); end
     def is_simple_poll?; self.poll_type == POLL; end
     def is_multiple_choice?; self.poll_type == MULTI; end
     def is_numeric_rating?; self.poll_type == RATE; end
@@ -61,7 +61,7 @@ module Ricer4::Plugins::Poll
     
     ## ListItem
     def display_list_item(number)
-      I18n.t('ricer3.plugins.poll.list_item',
+      I18n.t('ricer4.plugins.poll.list_item',
         number: number,
         type: type_label,
         question: self.text
@@ -72,7 +72,7 @@ module Ricer4::Plugins::Poll
     
     ## Outcome
     def display_outcome
-      return I18n.t('ricer3.plugins.poll.outcome_none') if self.total_votes <= 0
+      return I18n.t('ricer4.plugins.poll.outcome_none') if self.total_votes <= 0
       case self.poll_type
       when POLL; display_poll_outcome
       when MULTI; display_poll_outcome
@@ -97,7 +97,7 @@ module Ricer4::Plugins::Poll
       self.options.each_with_index do |option, i|
         times = option.answers.all.count
         percent = human_percent(times.to_f / self.total_votes.to_f)
-        out.push(I18n.t('ricer3.plugins.poll.outcome_partial', number:(i+1), choice:option.choice, times:times, percent:percent))
+        out.push(I18n.t('ricer4.plugins.poll.outcome_partial', number:(i+1), choice:option.choice, times:times, percent:percent))
         if (times > winner_times)
           winner_times,winner_indexes = times,[]
         end
@@ -113,14 +113,14 @@ module Ricer4::Plugins::Poll
     end
     
     def display_rate_outcome
-      I18n.t('ricer3.plugins.poll.outcome_rating',
+      I18n.t('ricer4.plugins.poll.outcome_rating',
         rating: human_fraction(rating, 1),
         count: self.answers.count
       )
     end
     
     def display_question_outcome
-      I18n.t('ricer3.plugins.poll.outcome_question')
+      I18n.t('ricer4.plugins.poll.outcome_question')
     end
     
   end

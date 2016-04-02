@@ -78,10 +78,10 @@ module Ricer4::Plugins::Bash
     def display_show_item(position)
       self.shown += 1
       self.save!
-      display_item('ricer3.plugins.bash.quote.show_item', position)
+      display_item('ricer4.plugins.bash.quote.show_item', position)
     end
     def display_list_item(position)
-      display_item('ricer3.plugins.bash.quote.list_item', position)
+      display_item('ricer4.plugins.bash.quote.list_item', position)
     end
       
   end

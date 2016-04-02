@@ -67,7 +67,7 @@ module Ricer4::Connectors
       handler = ws.instance_variable_get(:@handler)
       connection = handler.instance_variable_get(:@connection)
       port, ip = Socket.unpack_sockaddr_in(connection.get_peername)
-      "#{user.name}!#{@ip}@websocket.ricer3"
+      "#{user.name}!#{@ip}@websocket.ricer4"
     end
 
     def xlin_login(ws, line)

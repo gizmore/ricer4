@@ -37,7 +37,7 @@ module Ricer4::Plugins::Rss
     end
 
     arm_install('Ricer4::User' => 1) do |m|
-      m.add_foreign_key table_name, :arm_users, :column => :user_id, :name => :feed_users_f_key, :on_delete => :nullify
+      m.add_foreign_key table_name, :ricer_users, :column => :user_id, :name => :feed_users_f_key, :on_delete => :nullify
     end
     
     search_syntax do
@@ -61,11 +61,11 @@ module Ricer4::Plugins::Rss
     end
 
     def display_show_item(number)
-      I18n.t('ricer3.plugins.rss.show_item', id:self.id, name:self.name, title:self.title, description:self.description);
+      I18n.t('ricer4.plugins.rss.show_item', id:self.id, name:self.name, title:self.title, description:self.description);
     end
 
     def display_list_item(number)
-      I18n.t('ricer3.plugins.rss.list_item', id:self.id, name:self.name)
+      I18n.t('ricer4.plugins.rss.list_item', id:self.id, name:self.name)
     end
 
     def no_html(string, maxlen=32)
@@ -167,7 +167,7 @@ module Ricer4::Plugins::Rss
     
     def feedmessage(item)
       link = item.link == nil ? item.description : item.link
-      I18n.t('ricer3.plugins.rss.msg_got_news', name:name, title:item.title, link:link)
+      I18n.t('ricer4.plugins.rss.msg_got_news', name:name, title:item.title, link:link)
     end
     
   end

@@ -20,7 +20,7 @@ module Ricer4::Extend::ForcesAuthentication
       end
       
       def auth_check_text
-        I18n.t('ricer3.extender.forces_authentication.err_authenticate')
+        I18n.t('ricer4.extend.forces_authentication.err_authenticate')
       end
 
       def exec_auth_check!(line)

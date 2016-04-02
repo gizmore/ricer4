@@ -104,7 +104,7 @@ module Ricer4::Plugins::Paste
             autopaste_message(messages),
             messages.length,
             'text',
-            'ricer3.plugins.paste.auto_paste.msg_autopasted',
+            'ricer4.plugins.paste.auto_paste.msg_autopasted',
           )
       }
     end

@@ -58,7 +58,7 @@ module Ricer4::Plugins::Quote
     end
     
     def display_list_item(number)
-      I18n.t('ricer3.plugins.quote.display_list_item',
+      I18n.t('ricer4.plugins.quote.display_list_item',
         id: self.id,
         by: self.user.display_name,
         ago: self.display_ago,
@@ -68,7 +68,7 @@ module Ricer4::Plugins::Quote
     end
     
     def display_show_item(number=1)
-      I18n.t('ricer3.plugins.quote.display_show_item',
+      I18n.t('ricer4.plugins.quote.display_show_item',
         id: self.id,
         message: self.display_cite,
         by: self.user.display_name,

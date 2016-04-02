@@ -1,0 +1,8 @@
+load "ricer4/core/model/channel.rb"
+load "ricer4/core/model/exceptions.rb"
+load "ricer4/core/model/hash.rb"
+load "ricer4/core/model/permission.rb"
+load "ricer4/core/model/plugin.rb"
+load "ricer4/core/model/scope.rb"
+load "ricer4/core/model/server.rb"
+load "ricer4/core/model/user.rb"

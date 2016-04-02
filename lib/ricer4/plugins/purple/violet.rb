@@ -66,7 +66,7 @@ module Ricer4::Plugins::Purple
       # generate message
       message = Ricer4::Message.new
       message.raw = text
-      message.prefix = user.hostmask = "#{sender}!#{protocol}@ricer3.violet.libpurple"
+      message.prefix = user.hostmask = "#{sender}!#{protocol}@ricer4.violet.libpurple"
       message.type = 'PRIVMSG'
       message.args = [sender, text]
       message.server = server

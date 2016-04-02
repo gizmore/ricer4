@@ -27,8 +27,8 @@ module Ricer4::Plugins::Note
     end
 
     arm_install do |m|
-      m.add_foreign_key table_name, :arm_users,   :name => :note_senders,   :column => :sender_id,   :on_delete => :cascade 
-      m.add_foreign_key table_name, :arm_users,   :name => :note_receivers, :column => :receiver_id, :on_delete => :cascade 
+      m.add_foreign_key table_name, :ricer_users,   :name => :note_senders,   :column => :sender_id,   :on_delete => :cascade 
+      m.add_foreign_key table_name, :ricer_users,   :name => :note_receivers, :column => :receiver_id, :on_delete => :cascade 
       m.add_index       table_name, :sender_id,   :name => :note_sender_index
       m.add_index       table_name, :receiver_id, :name => :note_receiver_index
     end
@@ -52,7 +52,7 @@ module Ricer4::Plugins::Note
     end
 
     def display_list_item(number)
-      I18n.t('ricer3.plugins.note.list_item', id: number, from: self.sender.display_name, unread: unread_bold)
+      I18n.t('ricer4.plugins.note.list_item', id: number, from: self.sender.display_name, unread: unread_bold)
     end
     
     def unread_bold
@@ -61,7 +61,7 @@ module Ricer4::Plugins::Note
 
     def display_show_item(number=1)
       mark_read
-      I18n.t('ricer3.plugins.note.show_item',
+      I18n.t('ricer4.plugins.note.show_item',
         from: self.sender.display_name,
         date: self.display_date,
         text: self.message

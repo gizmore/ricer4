@@ -11,7 +11,7 @@ module Ricer4::Plugins::Board
       end
       
       def display_entry
-        tt("ricer3.plugins.board.entry", {
+        tt("ricer4.plugins.board.entry", {
           user: no_highlight(@user),
           date: l(@date),
           title: @title,
