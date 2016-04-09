@@ -3,11 +3,12 @@ module Ricer4
   class PluginLoader
     
     attr_reader :directories
+    
+    @@directories ||= []
       
     def initialize(config)
       @config = config
       @plugins = {}
-      @directories = []
     end
     
     def plugins
@@ -40,8 +41,12 @@ module Ricer4
     ############
     ### Init ###
     ############
+    def self.add_directory(directory)
+      @@directories.push(directory) unless @@directories.include?(directory)
+    end
+
     def add_directory(directory)
-      @directories.push(directory) unless @directories.include?(directory)
+      self.class.add_directory(directory)
     end
     
     def init_plugins
@@ -57,7 +62,7 @@ module Ricer4
       I18n.load_path = []
       ActiveRecord::Magic::Translate.init      
       ActiveRecord::Magic::Translate.load_i18n_dir(bot.core_directory)
-      @directories.each do |directory|;  ActiveRecord::Magic::Translate.load_i18n_dir(directory); end
+      @@directories.each do |directory|;  ActiveRecord::Magic::Translate.load_i18n_dir(directory); end
       I18n.reload!
     end
 
@@ -66,10 +71,10 @@ module Ricer4
     ### Plugin loader ###
     #####################
     def load_plugins
-      @directories.each do |directory|
+      @@directories.each do |directory|
         load_rb_dir("#{directory}/export")
       end
-      @directories.each do |directory|
+      @@directories.each do |directory|
         load_plugin_dir(directory)
       end
       detect_plugins_rec(Ricer4::Plugins)
@@ -138,7 +143,7 @@ module Ricer4
         end
       end
       bot.log.warn{"Plugin #{plugin.plugin_name} has no plugin dir!"}
-      return @directories.first
+      return @@directories.first
     end
     
   end

@@ -2,7 +2,7 @@ module Ricer4
   class User < ActiveRecord::Base
     
 #    include Ricer4::Include::Messages
-#    include Ricer4::Include::OnlineRecord
+    include Ricer4::Include::OnlineRecord
 #    include Ricer4::Include::LocalizedRecord
 #    include Ricer4::Include::NoHighlight
 
@@ -14,7 +14,7 @@ module Ricer4
     ### Cache ###
     #############
     arm_cache
-    arm_named_cache :guid, Proc.new{|user|"#{user[:name].downcase}:#{user[:server_id]}"}
+    arm_named_cache :guid, Proc.new{|user|"#{(user['name']||user[:name]).downcase}:#{user[:server_id]||user['server_id']}"}
     def arm_cache?; self.online == true; end
 
     #############

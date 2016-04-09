@@ -2,7 +2,6 @@ require "ricer4/version"
 
 load "activerecord-magic.rb"
 load "active_record/magic/locale/arm-locales.rb"
-#load "active_record/magic/permission/arm-permissions.rb"
 
 module Ricer4
   
@@ -20,6 +19,7 @@ module Ricer4
 
   load "ricer4/core/validators/all.rb"
   load "ricer4/core/net/all.rb"
+  load "ricer4/core/thread/thread.rb"
   load "ricer4/core/usage/all.rb"
 
   load "ricer4/core/bot.rb"

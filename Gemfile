@@ -9,7 +9,6 @@ gem 'chronic_duration', path: '../chronic_duration'
 gem 'activerecord-magic', :path => '../activerecord-magic'
 
 #####
-gem 'concurrent-ruby'
 gem 'bcrypt' # auth
 gem 'os' # perf
 gem 'valid_email2' # auth_email

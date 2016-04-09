@@ -42,8 +42,8 @@ module Ricer4::Mainloop
     @stub_message = m = Ricer4::Message.new
     m.raw = ""; m.prefix = "";
     m.type = "000"; m.args = []
-    m.server = Ricer4::Server.new({hostname: 'stub'})
-    m.sender = Ricer4::User.new({name: 'gizmore'})
+    m.server = Ricer4::Server.find_by({conector: 'shell'}) || Ricer4::Server.new({hostname: 'localhost'})
+    m.sender = Ricer4::User.where({server_id: m.server.id}).first  || Ricer4::User.new({name: 'gizmore'})
     m.target = nil
     m
   end
@@ -100,6 +100,7 @@ module Ricer4::Mainloop
   
   def cleanup_loop
     bot.log.info("Going into cleanup loop")
+    @uptime = Time.new
     while bot.running || some_servers_connected
       sleep(bot.running ? 1.5 : 0.5)
     end

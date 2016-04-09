@@ -138,6 +138,7 @@ class Ricer4::Command
   end
 
   def command_finished
+    byebug
     arm_publish("ricer/command/finished", self)
   end
   

@@ -45,7 +45,7 @@ module Ricer4::Plugins::Tcp
     end
     
     def write(text)
-      arm_signal(server, "ricer/outgoing", text)
+      arm_signal(@server, "ricer/outgoing", text)
       @mutex.synchronize {
         @socket.puts(text) rescue xlin_logout
       }
@@ -62,22 +62,22 @@ module Ricer4::Plugins::Tcp
       message.raw = msg
       message.server = @server
 
-      arm_signal(server, "ricer/incoming", message.raw)
-      arm_signal(server, "ricer/receive", message)
-      arm_signal(server, "ricer/received", message)
+      arm_publish("ricer/incoming", message.raw)
+      arm_publish("ricer/receive", message)
+      arm_publish("ricer/received", message)
       
       if @user
         message.prefix = @user.hostmask
         message.sender = @user
         message.type = "PRIVMSG"
         message.args = [@user.name, msg]
-        arm_signal(server, "ricer/messaged", message)
+        arm_publish("ricer/messaged", message)
       else
         xlin, username, password = *msg.split(' ')
         if (xlin && (xlin.downcase == 'xlin')) && username && password
           @user = xlin_login(username, password, message)
         else
-          write('401: XLIN MISSING - You are not logged in.')
+          write('401: XLIN username password MISSING - You are not logged in.')
         end
       end
     end
@@ -117,6 +117,7 @@ module Ricer4::Plugins::Tcp
       created = false
       user = get_user(@server, nickname)
       if user.nil?
+        byebug
         user = create_user(@server, nickname)
         user.permissions = Ricer4::Permission::AUTHENTICATED.bit
         user.password = password

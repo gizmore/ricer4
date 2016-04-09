@@ -1,4 +1,5 @@
 load "ricer4/core/model/channel.rb"
+load "ricer4/core/model/chanperm.rb"
 load "ricer4/core/model/exceptions.rb"
 load "ricer4/core/model/hash.rb"
 load "ricer4/core/model/permission.rb"

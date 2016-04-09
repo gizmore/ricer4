@@ -12,6 +12,7 @@ module Ricer4
     
     include Ricer4::Include::Base
     include Ricer4::Include::Replies
+    include Ricer4::Include::Threaded
     include Ricer4::Include::ExecuteChains
     include Ricer4::Include::ChecksPermission
     

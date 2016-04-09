@@ -1,6 +1,8 @@
 module Ricer4
   class Server < ActiveRecord::Base
     
+    include Ricer4::Include::OnlineRecord
+    
     self.table_name = 'ricer_servers'
     
     arm_cache

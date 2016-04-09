@@ -66,7 +66,7 @@ module Ricer4::Plugins::Shadowlamb::Shadowthreads
   end
   
   def increase_shadowtime(elapsed)
-    save_bot_setting(:shadowtime, get_bot_setting(:shadowtime) + elapsed)
+    save_setting(:shadowtime, get_setting(:shadowtime) + elapsed)
     elapsed
   end
   

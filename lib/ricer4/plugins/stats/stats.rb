@@ -7,13 +7,13 @@ module Ricer4::Plugins::Stats
     
     def plugin_init
       arm_subscribe('ricer/stopped') do
-        increase_setting(:uptime, :bot, bot.uptime)
-        bot.log.debug("Stats/Stats increases total_uptime by #{bot.uptime.to_f} which is now: #{show_bot_setting(:uptime)}")
+        increase_setting(:uptime, bot.uptime)
+        bot.log.debug("Stats/Stats increases total_uptime by #{bot.uptime.to_f} which is now: #{show_setting(:uptime)}")
       end
     end
     
     def total_uptime
-      get_bot_setting(:uptime) + bot.uptime
+      get_setting(:uptime) + bot.uptime
     end
     
     has_usage

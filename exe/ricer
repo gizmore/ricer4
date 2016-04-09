@@ -2,11 +2,14 @@ require "rubygems"
 require "bundler"
 Bundler.setup
 Bundler.require
+#require "byebug"
+#byebug
 
-bot = Ricer4::Bot.new(ARGV[0])
+bot = Ricer4::Bot.new(ARGV[0]||"ricer4.config.yml")
 bot.db_connect
 ActiveRecord::Magic::Update.install
+ActiveRecord::Magic::Update.run
 bot.load_plugins
 ActiveRecord::Magic::Update.run
 
-bot.start
+bot.mainloop

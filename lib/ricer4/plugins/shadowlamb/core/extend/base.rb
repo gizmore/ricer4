@@ -29,7 +29,7 @@ module Ricer4::Plugins::Shadowlamb::Core::Extend::Base
   def get_plugin(plugin_name); bot.loader.get_plugin(plugin_name); end
   def get_shadowlamb_plugin; get_plugin('Shadowlamb/Shadowlamb'); end
   def get_config(config_name)
-    get_plugin('Shadowlamb/Shadowlamb').get_bot_setting(config_name) rescue raise Ricer4::ExecutionException.new("Invalid Plugin Setting: #{config_name}"); 
+    get_plugin('Shadowlamb/Shadowlamb').get_setting(config_name) rescue raise Ricer4::ExecutionException.new("Invalid Plugin Setting: #{config_name}"); 
   end
 
 end

@@ -7,9 +7,18 @@ module Ricer4
     
     arm_events
     
-    attr_reader :config, :log, :loader, :running, :rand, :parser
+    attr_reader   :config, :log, :loader, :rand, :parser
+    attr_accessor :running
     
     def self.instance; @@instance; end
+    
+    def servers
+      Ricer4::Server.all
+    end
+    
+    def uptime
+      (Time.new - @uptime).to_f 
+    end
     
     def initialize(config_path)
       @@instance = self
@@ -20,6 +29,8 @@ module Ricer4
       @loader = Ricer4::PluginLoader.new(@config)
       @parser = Ricer4::CommandParser.new
       @running = true
+      @uptime = Time.new
+      add_plugin_dirs
     end
     
     def name
@@ -41,21 +52,27 @@ module Ricer4
       ActiveRecord::Magic::Base.arm_connect(@config.database)
     end
     
-    def load_plugins
+    def add_plugin_dirs
+      add_core_plugin_dirs
+      arm_publish('ricer/add_plugin_dirs', @loader)
+    end
+
+    def add_core_plugin_dirs
       Filewalker.proc_dirs(core_directory+"/plugins") do |file,dir|
         @loader.add_directory(dir)
       end
-      @loader.load_i18n
-      @loader.load_plugins
     end
     
-    def exec_argv(argv)
-      exec_line(argv.join(" "))
+    def load_plugins
+      @loader.load_i18n
+      @loader.load_plugins
     end
     
     def exec_line(line)
       result = nil
       exec_line_yielder(line){|text| result = text }
+      # Join all threads except first
+      Thread.list.tap{|t|t.shift;}.each{|t|t.join} 
       result
     end
     

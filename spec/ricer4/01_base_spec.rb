@@ -1,7 +1,7 @@
 require 'spec_helper'
 describe Ricer4::Bot do
   
-  it("loads the plugins and can sh exec") do
+  it("loads the plugins and can exec echo") do
     
     # LOAD
     bot = Ricer4::Bot.new("ricer4.spec.conf.yml")

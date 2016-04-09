@@ -1,6 +1,8 @@
 module Ricer4
   class Channel < ActiveRecord::Base
     
+    include Ricer4::Include::OnlineRecord
+
     self.table_name = 'ricer_channels'
     
     arm_cache
