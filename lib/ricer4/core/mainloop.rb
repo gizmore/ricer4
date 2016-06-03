@@ -1,5 +1,7 @@
 module Ricer4::Mainloop
   def mainloop
+    
+    return configure_hint unless configured?
 
     bot.log.info("Rice up!")
 
@@ -31,6 +33,17 @@ module Ricer4::Mainloop
     end
   end
   
+  def configured?
+    ['DEV', 'PROD'].include? bot.config.environment
+  end
+  
+  def configure_hint
+    puts "Please configure the bot now. Important is that environment is set to DEV or PROD."
+    puts "nano #{bot.config.path}"
+    puts "After that you can try:  bundle exec rice tcp.add 6999"
+    puts "This will install a netcat connector so you have a working bot."
+  end
+  
   def startup
     bot.running = true
     save_all_offline
@@ -43,20 +56,28 @@ module Ricer4::Mainloop
     m.raw = ""; m.prefix = "";
     m.type = "000"; m.args = []
     m.server = Ricer4::Server.find_by({conector: 'shell'}) || Ricer4::Server.new({hostname: 'localhost'})
-    m.sender = Ricer4::User.where({server_id: m.server.id}).first  || Ricer4::User.new({name: 'gizmore'})
+    m.sender = Ricer4::User.where({server_id: m.server.id}).first || Ricer4::User.new(shell_user_attributes(m.server))
     m.target = nil
-    m
+  end
+  
+  def shell_user_attributes(server)
+    {
+        server_id: server.id,
+        name: nickname,
+        permissions: Ricer4::Permissions.all_granted.bits,
+        locale_id: Ricer4::Locale.by_name(:bot),
+    }
   end
 
   def save_all_offline
-    bot.log.debug("Ricer4::Mainloop.save_all_offline")
+#    bot.log.debug("Ricer4::Mainloop.save_all_offline")
     [Ricer4::User, Ricer4::Server, Ricer4::Channel, Ricer4::Chanperm].each do |klass|
       save_offline(klass)
     end
   end
 
   def save_offline(klass)
-    bot.log.debug("Ricer4::Mainloop.save_offline(#{klass.name})")
+#    bot.log.debug("Ricer4::Mainloop.save_offline(#{klass.name})")
     klass.update_all(:online => false)
     klass.arm_clear_cache
   end
@@ -87,7 +108,7 @@ module Ricer4::Mainloop
   end
 
   def starting_loop
-    return false if (num_servers = bot.servers.enabled.count) == 0
+    return false if (num_servers = bot.servers.enabled.count) <= 1
     num_connect = 0
     sleep 3.seconds
     while num_connect != num_servers 
@@ -114,7 +135,7 @@ module Ricer4::Mainloop
   end
   
   def ctrl_c
-    bot.log.info("Mainloop.ctrl_c")
+    bot.log.debug("Mainloop.ctrl_c")
     bot.running = false
     bot.servers.online.each do |server|
       server.connector.send_quit("Caught SIGINT as ctrl+c was pressed and exiting cleanly.")

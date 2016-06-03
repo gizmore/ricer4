@@ -6,7 +6,7 @@ class Ricer4::CommandParser
   end
   
   def process_line(line)
-    bot.log.debug("CommandParser.process_line #{line}")
+#    bot.log.debug("CommandParser.process_line #{line}")
     command = parse(line)
     command.process
   end

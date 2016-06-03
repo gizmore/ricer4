@@ -4,7 +4,7 @@ module Ricer4::Plugins::Conf
     trigger_is :lang
     
     def self.available
-      Ricer4::Locale.all.collect{|l|l.iso}.join(', ')
+      ActiveRecord::Magic::Locale.all.collect{|l|l.iso}.join(', ')
     end
     
     has_usage '<locale>' , function: :execute_set_user_language

@@ -13,7 +13,7 @@ module Ricer4::Plugins::Seen
     end
     
     def plugin_init
-      arm_subscribe('ricer/messaged') do |message|
+      arm_subscribe('ricer/messaged') do |sender, message|
         if message.from_user?
           klass = message.is_privmsg? ? Said : Entry
         end

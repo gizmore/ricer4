@@ -2,7 +2,7 @@ module ActiveRecord::Magic::Param
   class Encoding < Ricer4::Parameter
     
     def input_to_value(input)
-      Ricer4::Encoding.by_iso(input)
+      ActiveRecord::Magic::Encoding.by_iso(input)
     end
 
     def value_to_input(encoding)
@@ -10,7 +10,7 @@ module ActiveRecord::Magic::Param
     end
 
     def validate!(value)
-      invalid_type! unless value.is_a?(Ricer4::Encoding)
+      invalid_type! unless value.is_a?(ActiveRecord::Magic::Encoding)
     end
     
   end

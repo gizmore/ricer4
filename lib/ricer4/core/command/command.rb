@@ -14,18 +14,17 @@ class Ricer4::Command
 
   arm_events
   
-  attr_reader   :plugin, :failed, :counter
+  attr_reader   :plugin, :failed, :counter, :sent_replies
   attr_accessor :parent, :next, :prev, :text
   attr_accessor :processed, :processing, :threading
-  attr_reader   :sent_replies
   
   def self.current; Thread.current[:ricer_command]; end
   def self.current=(command); Thread.current[:ricer_command] = command; end
   
-  @@counter = 0 # DBG
+#  @@counter = 0 # DBG
 
   def initialize(plugin=nil)
-    @@counter += 1; @counter = @@counter # DBG
+#    @@counter += 1; @counter = @@counter # DBG
     @plugin = plugin
     @tokens, @replies, @parent, @text, @next = nil
     @processed, @processing, @threading, @failed = false
@@ -58,7 +57,7 @@ class Ricer4::Command
   
   
   def add_reply(reply)
-    bot.log.debug("Ricer4::Command.add_reply(#{reply.text}) CMD: #{to_string}")
+#    bot.log.debug("Ricer4::Command.add_reply(#{reply.text}) CMD: #{to_string}")
     replies.push(reply)
     @failed = reply.is_failure?
   end
@@ -79,12 +78,12 @@ class Ricer4::Command
   end
   
   def process
-    bot.log.debug("Command.process "+self.to_string)
+#    bot.log.debug("Command.process "+self.to_string)
     if !@processing
       if @plugin && tokens_complete?
         begin
           @processing = true
-          bot.log.debug("Command.process #{self.to_string} PROCESSING WITH: '#{self.line}'")
+#          bot.log.debug("Command.process #{self.to_string} PROCESSING WITH: '#{self.line}'")
           self.class.current = self
           @plugin.call_exec_functions(self.line)
           self.class.current = self.parent
@@ -105,7 +104,7 @@ class Ricer4::Command
   end
   
   def late_processed
-    bot.log.debug("Command.late_processed #{to_string}")
+#    bot.log.debug("Command.late_processed #{to_string}")
     gather_results
     unless @failed
       if @next
@@ -138,11 +137,11 @@ class Ricer4::Command
   end
 
   def command_finished
-    byebug
     arm_publish("ricer/command/finished", self)
   end
   
   def send_replies
+#    bot.log.debug("Ricer4::Command.send_replies()")
     replies.each do |reply|
       @sent_replies.push(reply)
       current_message.send_reply(reply)
@@ -150,7 +149,7 @@ class Ricer4::Command
   end
 
   def gather_results
-    bot.log.debug("Command.gather_results #{self.to_string}")
+#    bot.log.debug("Command.gather_results #{self.to_string}")
     @processed = true
     @text ||= ""
     if @replies
@@ -158,7 +157,7 @@ class Ricer4::Command
         @text += " "
         @text += @replies.collect{|reply| reply.text }.join(" ")
         @text.ltrim!
-        bot.log.debug("Command.gather_results: '#{@text}'")
+#        bot.log.debug("Command.gather_results: '#{@text}'")
       else
         send_replies
       end
@@ -167,9 +166,9 @@ class Ricer4::Command
   end
   
   def line
-    back = ""
-    back += @tokens.collect{|token|token.text}.join(" ") if @tokens
-    back
+    @tokens ?
+      @tokens.collect{|token|token.text}.join(" ") :
+      ''
   end
   
 end

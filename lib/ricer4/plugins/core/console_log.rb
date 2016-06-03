@@ -2,10 +2,10 @@ module Ricer4::Plugins::Core
   class ConsoleLog < Ricer4::Plugin
     
     def plugin_init
-      arm_subscribe("ricer/incoming") do |line|
+      arm_subscribe("ricer/incoming") do |sender, line|
         log_line(line, " << ")
       end
-      arm_subscribe("ricer/outgoing") do |line|
+      arm_subscribe("ricer/outgoing") do |sender, line|
         log_line(line, " >> ")
       end
     end

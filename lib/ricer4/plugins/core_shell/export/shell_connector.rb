@@ -36,7 +36,7 @@ module Ricer4::Connectors
         user.password = "1111"
       end
       user.login!
-      user
+      user.localize!
     end
 
     def get_tty_sender_name

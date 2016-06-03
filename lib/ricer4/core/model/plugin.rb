@@ -12,6 +12,7 @@ module Ricer4
     
     include Ricer4::Include::Base
     include Ricer4::Include::Replies
+    include Ricer4::Include::Readable
     include Ricer4::Include::Threaded
     include Ricer4::Include::ExecuteChains
     include Ricer4::Include::ChecksPermission
@@ -37,8 +38,12 @@ module Ricer4
     def plugin_license; :RICED; end
     def plugin_priority; 50; end
     def plugin_trigger; nil; end
-    def plugin_description(long); t!(:description) rescue nil; end
+    def plugin_description(long); t!(:description) rescue plugin_default_description; end
+    def plugin_default_description; "#{plugin_name} has no description."; end
     def plugin_init; end
+    
+    def get_plugin(plugin_name); self.class.get_plugin(plugin_name); end
+    def self.get_plugin(plugin_name); bot.loader.get_plugin(plugin_name); end
 
   end
 end

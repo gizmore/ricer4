@@ -37,7 +37,7 @@ module Ricer4::Plugins::Conf
     
     # When we receive a privmsg, we set the encoding to user encoding or server encoding
     def plugin_init
-      arm_subscribe('ricer/messaged') do |message|
+      arm_subscribe('ricer/messaged') do |sender, message|
         # begin
           # user.localize!
           # encoding = user.encoding || server.encoding

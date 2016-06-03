@@ -7,7 +7,7 @@ module Ricer4
     
     def self.by_name(connector)
       begin
-        Ricer4::Connectors.const_get(connector.to_s.camelcase)
+        Ricer4::Connectors.const_get(connector.to_s.camelcase.to_sym)
       rescue
         raise Ricer4::UnknownConnectorException.new(connector)
       end

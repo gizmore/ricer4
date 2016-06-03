@@ -42,6 +42,7 @@ module Ricer4
     ### Init ###
     ############
     def self.add_directory(directory)
+#      arm_log.debug("Adding plugin directory #{directory}")
       @@directories.push(directory) unless @@directories.include?(directory)
     end
 
@@ -92,7 +93,14 @@ module Ricer4
     def load_rb_dir(directory)
       if File.directory?(directory)
         Filewalker.traverse_files(directory, '*.rb') do |file|
-          load file
+          begin
+            load file
+#            bot.log.debug("Loaded ruby file: #{file}")
+          rescue => e
+            bot.log.error("Cannot load rb file: #{file}")
+            bot.log.exception(e)
+            raise e
+          end
         end
       end
     end

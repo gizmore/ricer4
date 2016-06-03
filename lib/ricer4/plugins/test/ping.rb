@@ -16,7 +16,7 @@ module Ricer4::Plugins::Test
     has_usage
     def execute
       @count += 1
-      rply :msg_pong, count: @count, total: increase_setting(:pongs, :bot)
+      rply :msg_pong, count: @count, total: increase_setting(:pongs)
     end
 
   end

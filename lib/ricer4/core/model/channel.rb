@@ -1,9 +1,10 @@
 module Ricer4
   class Channel < ActiveRecord::Base
     
-    include Ricer4::Include::OnlineRecord
-
     self.table_name = 'ricer_channels'
+
+    include Ricer4::Include::OnlineRecord
+    include Ricer4::Include::LocalizedRecord
     
     arm_cache
     arm_named_cache :guid, Proc.new{|channel|"#{channe[:name].downcase}:#{channel[:server_id]}"}
@@ -23,12 +24,12 @@ module Ricer4
         t.boolean :online,      :default => false, :null => false
         t.timestamps :null => false
       end
-      migration.add_index table_name, :name, name: :channels_name_index
+      migration.add_index table_name, :name,      name: :channels_name_index
       migration.add_index table_name, :server_id, name: :channels_server_index
-      migration.add_foreign_key table_name, :ricer_servers, :column => :server_id, :on_delete => :cascade
-      migration.add_foreign_key table_name, :arm_locales, :column => :locale_id
-      migration.add_foreign_key table_name, :arm_encodings, :column => :encoding_id
-      migration.add_foreign_key table_name, :arm_timezones, :column => :timezone_id
+      migration.add_foreign_key table_name, :ricer_servers, :column => :server_id,   :on_delete => :cascade
+      migration.add_foreign_key table_name, :arm_locales,   :column => :locale_id,   :on_delete => :nullify
+      migration.add_foreign_key table_name, :arm_encodings, :column => :encoding_id, :on_delete => :nullify
+      migration.add_foreign_key table_name, :arm_timezones, :column => :timezone_id, :on_delete => :nullify
     end
     
     def locale; locale_id == nil ? server.locale : ActiveRecord::Magic::Locale.by_id(self.locale_id); end

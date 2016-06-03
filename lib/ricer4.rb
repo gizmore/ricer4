@@ -1,4 +1,4 @@
-require "ricer4/version"
+load "ricer4/version.rb"
 
 load "activerecord-magic.rb"
 load "active_record/magic/locale/arm-locales.rb"

@@ -1,12 +1,12 @@
+require "bcrypt"
+
 module Ricer4
   class User < ActiveRecord::Base
     
-#    include Ricer4::Include::Messages
-    include Ricer4::Include::OnlineRecord
-#    include Ricer4::Include::LocalizedRecord
-#    include Ricer4::Include::NoHighlight
-
     self.table_name = 'ricer_users'
+
+    include Ricer4::Include::OnlineRecord
+    include Ricer4::Include::LocalizedRecord
 
     attr_accessor :hostmask
 
@@ -47,13 +47,14 @@ module Ricer4
       m.add_foreign_key table_name, :arm_timezones, :column => :timezone_id, :on_delete => :nullify
     end
     
+    
     #################
     ### Localized ###
     #################
-    # def locale; locale_id == nil ? server.locale : Ricer4::Locale.by_id(self.locale_id); end
-    # def timezone; timezone_id == nil ? server.timezone : Ricer4::Timezone.by_id(self.timezone_id); end
-    # def encoding; encoding_id == nil ? server.encoding : Ricer4::Encoding.by_id(self.encoding_id); end
-
+    def locale; self.locale_id == nil ? server.locale : ActiveRecord::Magic::Locale.by_id(self.locale_id); end
+    def timezone; self.timezone_id == nil ? server.timezone : ActiveRecord::Magic::Timezone.by_id(self.timezone_id); end
+    def encoding; self.encoding_id == nil ? server.encoding : ActiveRecord::Magic::Encoding.by_id(self.encoding_id); end
+    
 
     ###############
     ### Display ###

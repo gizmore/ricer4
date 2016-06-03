@@ -9,7 +9,7 @@ module Ricer4::Plugins::Core
     has_usage  '<plugin> <message|named:"args">', function: :execute_begin
 
     def plugin_init
-      arm_subscribe('ricer/processing') do |message|
+      arm_subscribe('ricer/processing') do |sender, message|
         if has_line? # something to operate on?
           append_line # Catch in our queue
         end

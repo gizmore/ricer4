@@ -3,10 +3,10 @@ require "bundler"
 Bundler.setup
 Bundler.require
 
-bot = Ricer4::Bot.new(ARGV[0])
+bot = Ricer4::Bot.new("ricer4.config.yml")
 bot.db_connect
 ActiveRecord::Magic::Update.install
 bot.load_plugins
 ActiveRecord::Magic::Update.run
 
-puts bot.exec_line(ARGV[1..-1].join(" "))
+puts bot.exec_line(ARGV[0..-1].join(" "))

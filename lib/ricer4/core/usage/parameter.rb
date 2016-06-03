@@ -19,9 +19,9 @@ module Ricer4
     ###############
     # Create a Parameter from a usage pattern snippet like # [<..text..>] or # [<integer|min:5,max:8,test:"abc",arr:[foo],prices:{foo:bar}>]
     def self.from_pattern(pattern)
-      optional = pattern.starts_with?('['); pattern.trim!('[]') # parse [optional]
-      pattern.trim!('<>') # parse '<>'
-      eater = pattern.starts_with?('.'); pattern.trim!('.') # parse ..eater..
+      optional = pattern.starts_with?('['); pattern.trim!('[]') # parse enclosing [] optional
+      pattern.trim!('<>') # parse enclosing '<>'
+      eater = pattern.starts_with?('.'); pattern.trim!('.') # parse ..eater.. inside <..type..>
       options = options_from_optionstr(pattern.substr_from('|') || '') # parse options:4,foo:5
       classname = (pattern.substr_to('|') || pattern) # parse classname integer:
       options.merge!({
@@ -40,3 +40,4 @@ module Ricer4
 
   end
 end
+ActiveRecord::Magic::Parameter.send :include, Ricer4::Include::Readable

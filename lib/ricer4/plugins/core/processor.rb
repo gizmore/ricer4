@@ -7,14 +7,14 @@ module Ricer4::Plugins::Core
     
     def plugin_init
       @parser = Ricer4::CommandParser.new
-      arm_subscribe('ricer/messaged') do |message|
+      arm_subscribe('ricer/messaged') do |sender, message|
         arm_publish('ricer/processing', message)
         unless message.processed
           if line = triggered_line(message)
             begin
               Ricer4::Command.current = nil
               @parser.process_line(line)
-            rescue StandardError => e
+            rescue Exception => e
               message.send_reply(Ricer4::Reply.new(e.message, self, Ricer4::Reply::FAILURE))
             ensure
               message.processed = true
