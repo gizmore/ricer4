@@ -67,7 +67,7 @@ module Ricer4::Extend::HasUsage
               arm_publish('ricer/triggered', self)
               return usage.execute(self, args)
             end
-          rescue Ricer4::ParameterException => e
+          rescue ActiveRecord::Magic::InvalidParameter => e
             exceptions.push(e)
           rescue StandardError => e
             return reply_exception(e)
@@ -75,9 +75,13 @@ module Ricer4::Extend::HasUsage
         end
         begin
           if (exceptions.length > 0) && (!line.empty?)
-            ereply get_usage(exceptions.first.message)
+            ereply get_usage(:err_usage, exceptions.first.message)
+          elsif (wanted_permission)
+            ereply get_usage(:err_permission) + scope_and_permission_text
+          elsif (wanted_scope)
+            ereply get_usage(:err_scope) + scope_and_permission_text
           else
-            ereply get_usage
+            ereply get_usage(:msg_usage)
           end
         rescue StandardError => e
           return reply_exception(e)
@@ -92,10 +96,8 @@ module Ricer4::Extend::HasUsage
       #####################
       ### Help Messages ###
       #####################
-      def get_usage(error=nil)
-        key = 'ricer4.extend.has_usage.'
-        key += error == nil ? 'msg_usage' : 'err_usage'
-        key += '_not_here' unless has_scope?
+      def get_usage(key, error=nil)
+        key ||= 'ricer4.extend.has_usage.' + key
         tt(key,
           error: error,
           trigger: plugin_trigger,

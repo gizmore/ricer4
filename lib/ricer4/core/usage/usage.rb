@@ -87,8 +87,6 @@ module Ricer4
      
     def parse_params(plugin, argline)
       
-      # byebug
-
       back = []
       cli_args = parse_cli_args(argline)
 

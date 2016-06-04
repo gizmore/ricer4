@@ -32,8 +32,9 @@ module Ricer4::Connectors
     def get_tty_sender
       user = load_or_create_user(server, get_tty_sender_name)
       unless user.registered?
-        user.permissions = Ricer4::Permission::AUTHENTICATED.bit
+        user.register(Ricer4::Permission.all_granted.bits)
         user.password = "1111"
+        user.grant(Ricer4::Permission.all_granted.bits)
       end
       user.login!
       user.localize!

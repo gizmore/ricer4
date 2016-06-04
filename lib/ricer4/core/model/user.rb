@@ -157,16 +157,28 @@ module Ricer4
       register if first_time
     end
     
-    private
-
-    def register
-      bits = Permission::REGISTERED.bit|Permission::AUTHENTICATED.bit
-      self.permissions |= bits
-      self.save!
-      all_chanperms.each do |chanperm|
-        chanperm.permissions |= bits
-        chanperm.save!
+    def grant(bits)
+      if (bits = 0 + bits) != 0
+        self.all_chanperms.each do |chanperm|
+          chanperm.permissions = grant_bits(chanperm.permissions, bits);
+          chanperm.save!
+        end
+        self.permissions = grant_bits(self.permissions, bits);
+        self.save!
       end
+      self
+    end
+
+    private
+    
+    def grant_bits(bits, granted)
+      return granted >= 0 ? (bits|granted) : ((~granted)&bits); 
+    end
+
+    def register(permissions=nil)
+      permissions ||= 0; # no extra perms
+      bits = Permission::REGISTERED.bit|Permission::AUTHENTICATED.bit|permissions
+      self.grant(bits)
     end
     
   end

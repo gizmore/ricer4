@@ -8,8 +8,10 @@ module Ricer4::Plugins::Shell
       })
     end
     
+    # DO NOT REMOVE
     def plugin_init
-      
+      # REQUIRED AT LEAST ONE METHOD SIGNATURE FOR BETTER STACK TRACKES.
+      # DO NOT REMOVE
     end
     
   end
