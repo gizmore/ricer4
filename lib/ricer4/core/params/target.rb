@@ -26,7 +26,10 @@ module ActiveRecord::Magic
       result += input_to_servers(input) if options[:servers]
       result += input_to_channels(input) if options[:channels]
       result += input_to_users(input) if options[:users]
-      return nil if result.length == 0
+      if result.length == 0
+        invalid!(:err_no_target)
+        return nil 
+      end
       options[:multiple] ? result : result.first
     end
     

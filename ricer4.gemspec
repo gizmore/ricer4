@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.4"
   spec.add_development_dependency "ruby-prof", "~> 0.15"
   
+  spec.add_runtime_dependency "htmlentities", "~> 4.3"
   spec.add_runtime_dependency "activerecord-magic", "~> 0.1"
   spec.add_runtime_dependency "bcrypt", "~> 3.1"
 

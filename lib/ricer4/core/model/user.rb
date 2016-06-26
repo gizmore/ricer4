@@ -7,8 +7,11 @@ module Ricer4
 
     include Ricer4::Include::OnlineRecord
     include Ricer4::Include::LocalizedRecord
+    include Ricer4::Include::NoHighlight
 
     attr_accessor :hostmask
+    
+    arm_events
 
     #############
     ### Cache ###
@@ -72,6 +75,11 @@ module Ricer4
     #####################
     def wants_privmsg?; !self.wants_notice?; end
     def wants_notice?; self.message_type == 'n'; end
+    def send_message(line, plugin=nil, type=Ricer4::Reply::MESSAGE)
+      reply = Ricer4::Reply.new(line, plugin, type, self)
+      server.send_reply(reply)
+      self
+    end
 
     ###########################
     ### Channel permissions ###
@@ -143,6 +151,11 @@ module Ricer4
         Ricer4::Chanperm.where(:user_id => self.id, :online => true).each do |chanperm|
           chanperm.authenticated = bool
         end
+        if @authenticated
+          arm_publish('user/signed/in', self)
+        else
+          arm_publish('user/signed/out', self)
+        end 
       end
       self
     end
@@ -155,6 +168,8 @@ module Ricer4
       self.hashed_password = BCrypt::Password.create(new_password)
       self.save!
       register if first_time
+      arm_publish('user/changed/pass', self) unless first_time
+      self
     end
     
     def grant(bits)
@@ -169,17 +184,19 @@ module Ricer4
       self
     end
 
-    private
-    
-    def grant_bits(bits, granted)
-      return granted >= 0 ? (bits|granted) : ((~granted)&bits); 
-    end
-
     def register(permissions=nil)
       permissions ||= 0; # no extra perms
       bits = Permission::REGISTERED.bit|Permission::AUTHENTICATED.bit|permissions
       self.grant(bits)
+      arm_publish('user/signed/up', self)
+      self
     end
     
+    private
+    
+    def grant_bits(bits, granted)
+      granted >= 0 ? (bits|granted) : ((~granted)&bits);
+    end
+
   end
 end

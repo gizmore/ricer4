@@ -30,6 +30,13 @@ module Ricer4::Include::OnlineRecord
 
   # set_online saves the class instantly and updates the cache implicitly.
   module InstanceMethods
+    def online=(bool)
+      if (self.online != bool)
+        event = "#{self.class.short_name.downcase}/went/#{bool ?'online':'offline'}"
+        arm_publish(event, self)
+        write_attribute(:online, bool)
+      end
+    end
     def online?; self.online; end
     def offline?; !self.online; end
     def set_offline; set_online(false); end

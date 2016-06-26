@@ -33,9 +33,9 @@ module Ricer4
         t.string  :user_pass,   :default => nil,   :null => true,  :limit => 64
         t.string  :server_pass, :default => nil,   :null => true,  :limit => 64
         t.string  :triggers,    :default => nil,   :null => true,  :limit => 4
-        t.integer :locale_id,   :default => 1,     :null => false
-        t.integer :encoding_id, :default => 1,     :null => false
-        t.integer :timezone_id, :default => 1,     :null => false
+        t.integer :locale_id,   :default => 1,     :null => true
+        t.integer :encoding_id, :default => 1,     :null => true
+        t.integer :timezone_id, :default => 1,     :null => true
         t.boolean :enabled,     :default => true,  :null => false
         t.boolean :online,      :default => false, :null => false
         t.timestamps :null => false

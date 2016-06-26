@@ -9,7 +9,7 @@ module Ricer4::Plugins::Core
 
     def plugin_init
       arm_subscribe('ricer/processing') do |sender, message|
-        if line == triggered_line(message)
+        if message.line == triggered_line(message)
           if bot.loader.get_plugin_for_line(line) == self
             get_plugin('Core/Begin').finish
           end

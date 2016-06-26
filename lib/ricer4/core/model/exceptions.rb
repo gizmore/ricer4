@@ -79,5 +79,14 @@ module Ricer4
       I18n.t('ricer4.err_unknown_connector', connector: @connector)
     end
   end
+  
+  class UnknownPluginException < Exception
+    def initialize(plugin_name)
+      @plugin_name = plugin_name
+    end
+    def message
+      I18n.t('ricer4.err_unknown_plugin', plugin_name: @plugin_name)
+    end
+  end
 
 end

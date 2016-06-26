@@ -19,6 +19,10 @@ module Ricer4
       @plugins[name]
     end
     
+    def get_plugin!(name)
+      get_plugin(name) || (raise Ricer4::UnknownPluginException.new(name))
+    end
+
     #######################
     ### Plugin for line ###
     #######################
@@ -87,7 +91,7 @@ module Ricer4
       Filewalker.proc_files(directory, '*.rb') do |file|
         load file
       end
-      load_rb_dir("#{directory}/commands")
+      load_rb_dir("#{directory}/command")
     end
     
     def load_rb_dir(directory)

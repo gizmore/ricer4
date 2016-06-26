@@ -12,9 +12,8 @@ module Ricer4
     
     def self.instance; @@instance; end
     
-    def servers
-      Ricer4::Server.all
-    end
+    def servers; Ricer4::Server; end
+    def users; Ricer4::User.all; end
     
     def uptime
       (Time.new - @uptime).to_f 
@@ -70,24 +69,59 @@ module Ricer4
       @loader.load_plugins
     end
     
+    ############################
+    ### THIS IS ONLY SPEC ##
+    ### SPEC ONLY! #######
+     #################
+    ### Exec faker ###
+     #################
     def exec_line(line)
       result = nil
-      exec_line_yielder(line){|text| result = text }
-      # Join all threads except first
-      Thread.list.tap{|t|t.shift;}.each{|t|t.join} 
+      exec_line_yielder(line){|text|
+        result = text
+      }
       result
     end
 
-    def exec_line_for(plugin_name, line)
-      exec_line "#{@loader.get_plugin(plugin_name).plugin_trigger} #{line}"
+    def exec_line_for(plugin_name, line="")
+      plugin = @loader.get_plugin!(plugin_name)
+      line = line.empty? ? "" : " #{line}"
+      exec_line "#{plugin.plugin_trigger}#{line}"
     end
     
     def exec_line_yielder(line, &block)
-      arm_subscribe('ricer/command/finished') { |command|
+      hook = arm_subscribe('ricer/command/finished') { |command|
         yield command.sent_replies.collect{|reply| reply.text }.join("\n")
-      }.max_calls(1)
+      }
       server = Ricer4::Server.where(:conector => 'shell').first
       server.connector.send_from_tty(line)
+      Thread.list.tap{|t|t.shift;}.each{|t|t.join}
+      hook.remove
+    end
+    
+    #####################
+    ### Exec as faker ###
+    #####################
+    def exec_user=(username)
+      server = Ricer4::Server.where(:conector => 'shell').first
+      server.connector.tty_user_name = username
+    end
+
+    def exec_as(username, &block)
+      self.exec_user=(username)
+      yield
+    end
+
+    def exec_line_as(username, line)
+      exec_as(username) do 
+        exec_line(line)
+      end
+    end
+
+    def exec_line_as_for(username, plugin_name, line="")
+      exec_as(username) do 
+        exec_line_for(plugin_name, line)
+      end
     end
 
   end

@@ -12,7 +12,6 @@
 module ActiveRecord::Magic::Translate::Extend
   
   def i18t!(key, args={})
-    byebug
     case I18n.locale
     when :bot; i18t_bot!(key, args)
     when :ibdes; i18t_ibdes!(key, args)
@@ -21,7 +20,6 @@ module ActiveRecord::Magic::Translate::Extend
   end
   
   def i18t_bot!(key, args)
-    byebug
     begin
       I18n.t!(key, args)
     rescue

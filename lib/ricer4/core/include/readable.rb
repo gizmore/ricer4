@@ -1,3 +1,5 @@
+require 'htmlentities'
+
 module Ricer4::Include::Readable
 
   ACTION ||= "\x01"; def action_text(text); "\x01#{text}\x01"; end
@@ -34,4 +36,13 @@ module Ricer4::Include::Readable
   def no_html(s, maxlen=nil)
    shorten(s, maxlen)
   end
+  
+  def html_decode(s)
+    HTMLEntities.new.decode(s)
+  end
+  
+  def printjson(obj)
+    obj.to_s
+  end
+
 end

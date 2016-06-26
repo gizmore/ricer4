@@ -68,6 +68,8 @@ module Ricer4::Extend::HasUsage
               return usage.execute(self, args)
             end
           rescue ActiveRecord::Magic::InvalidParameter => e
+            exceptions.unshift(e)
+          rescue Ricer4::MissingParameterException => e
             exceptions.push(e)
           rescue StandardError => e
             return reply_exception(e)
