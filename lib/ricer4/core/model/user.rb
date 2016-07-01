@@ -12,6 +12,7 @@ module Ricer4
     attr_accessor :hostmask
     
     arm_events
+    arm_settings
 
     #############
     ### Cache ###

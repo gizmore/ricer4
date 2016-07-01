@@ -5,7 +5,9 @@ module Ricer4
 
     include Ricer4::Include::OnlineRecord
     include Ricer4::Include::LocalizedRecord
-    
+
+    arm_settings
+
     arm_cache
     arm_named_cache :guid, Proc.new{|channel|"#{channe[:name].downcase}:#{channel[:server_id]}"}
     def arm_cache?; self.online == true; end

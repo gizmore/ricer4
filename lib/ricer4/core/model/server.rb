@@ -12,6 +12,7 @@ module Ricer4
     
     arm_cache
     arm_events
+    arm_settings
 
     attr_reader :connection, :nickname_prefix
     

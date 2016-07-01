@@ -18,9 +18,9 @@ module Ricer4::Extend::DefaultEnabled
       ################
       if get_class_variable(:@default_enabled).nil?
         define_class_variable(:@default_enabled, def_enabled)
+        has_setting name: :plugin_enabled, type: :boolean, scope: :bot, permission: options[:disable_perm_bot], default: def_enabled
+        has_setting name: :plugin_enabled, type: :boolean, scope: :server, permission: options[:disable_perm_server], default: def_enabled
         has_setting name: :plugin_enabled, type: :boolean, scope: :channel, permission: options[:disable_perm_channel], default: def_enabled
-        has_setting name: :plugin_enabled, type: :boolean, scope: :server,  permission: options[:disable_perm_server],  default: def_enabled
-        has_setting name: :plugin_enabled, type: :boolean, scope: :bot,     permission: options[:disable_perm_bot],     default: def_enabled
       elsif settings = get_class_variable(:@mem_settings)
         set_class_variable(:@default_enabled, def_enabled)
         settings.each do |setting|

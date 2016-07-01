@@ -9,7 +9,8 @@ module Ricer4
     arm_cache
     arm_named_cache(:name)
     arm_events
-    
+    arm_settings
+
     include Ricer4::Include::Base
     include Ricer4::Include::Replies
     include Ricer4::Include::Readable
@@ -25,8 +26,8 @@ module Ricer4
       end
     end
 
-    def self.plugin_module_object; @plugin_module_object ||= Object.const_get(name.deconstantize); end
-    def self.plugin_module; @plugin_module ||= name.split('::')[-2]; end
+    def self.plugin_module_object; Object.const_get(name.deconstantize); end
+    def self.plugin_module; name.split('::')[-2]; end
     def self.plugin_name; @plugin_name ||= name.split('::')[-2..-1].join('/'); end
     def plugin_module_object; self.class.plugin_module_object; end
     def plugin_module; self.class.plugin_module; end
