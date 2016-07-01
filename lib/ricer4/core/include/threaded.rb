@@ -5,7 +5,8 @@ module Ricer4::Include::Threaded
   end
   
   def threaded_org(&block)
-    current_command.threading = true
+    command = current_command
+    command.threading = true if command
     guid = Ricer4::Thread.fork_counter_inc
     Ricer4::Thread.execute do
       begin
@@ -17,7 +18,7 @@ module Ricer4::Include::Threaded
         reply_exception(e)
       ensure
         bot.log.debug "[#{guid}] Stopped thread at #{display_proc(proc)}"
-        current_command.late_processed
+        command.late_processed if command
       end
     end
   end
