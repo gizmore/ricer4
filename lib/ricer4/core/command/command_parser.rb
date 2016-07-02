@@ -7,8 +7,10 @@ class Ricer4::CommandParser
   
   def process_line(line)
 #    bot.log.debug("CommandParser.process_line #{line}")
-    command = parse(line)
-    command.process
+    if command = parse(line)
+      command.process
+    end
+    nil
   end
   
   def parse(line)
@@ -19,7 +21,8 @@ class Ricer4::CommandParser
   
   def commandify_line(line)
     # The command itself
-    command = Ricer4::Command.new(get_plugin(line))
+    return nil unless plugin = get_plugin(line)
+    command = Ricer4::Command.new(plugin)
 
     # If we are in a current command, we invoked via exec_line
     if Ricer4::Command.current
@@ -132,7 +135,7 @@ class Ricer4::CommandParser
   end
   
   def get_plugin(line)
-    bot.loader.get_plugin_for_line!(line)
+    bot.loader.get_plugin_for_line(line)
   end
   
 end

@@ -44,12 +44,7 @@ module Ricer4::Connectors
       message.sender = self.get_tty_sender
       message
     end
-    
-    # def send_from_tty(line)
-      # tty_message
-      # bot.parser.process_line(line)
-    # end
-    
+
     def get_tty_sender
       user = load_or_create_user(server, get_tty_sender_name)
       unless user.registered?
@@ -71,12 +66,23 @@ module Ricer4::Connectors
     end
     
     def send_reply(reply)
+      @tty_output.push(reply.text)
       puts reply.text
     end
     
     def send_quit(text)
-      puts text
+      send_reply(text)
       disconnect!
+    end
+    
+    def clear_tty_output
+      @tty_output = []
+    end
+    
+    def tty_output
+      result = @tty_output
+      @tty_output = []
+      result
     end
     
   end

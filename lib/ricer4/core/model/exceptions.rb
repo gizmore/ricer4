@@ -1,6 +1,7 @@
 module Ricer4
   
   class Exception < StandardError
+    arm_i18n
     def initialize(text="")
       super(text)
     end
@@ -14,9 +15,9 @@ module Ricer4
   class NoPermissionException < Exception; end
   class SilentCancelException < Exception; end
 
-  class BracketNotOpenException < Exception; def message; I18n.t('ricer4.err_bracket_not_open'); end; end
-  class BracketNotClosedException < Exception; def message; I18n.t('ricer4.err_bracket_not_closed'); end; end
-  class NoParentForCommandException < Exception; def message; I18n.t('ricer4.err_no_parent_for_command'); end; end
+  class BracketNotOpenException < Exception; def message; t('ricer4.err_bracket_not_open'); end; end
+  class BracketNotClosedException < Exception; def message; t('ricer4.err_bracket_not_closed'); end; end
+  class NoParentForCommandException < Exception; def message; t('ricer4.err_no_parent_for_command'); end; end
   
   class ParameterException < Exception
     attr_reader :parameter_name
@@ -24,7 +25,7 @@ module Ricer4
       @parameter_name = pn
       @text = msg
       def message
-        I18n.t('ricer4.err_invalid_parameter', parameter_name: @parameter_name, reason: @text)
+        t('ricer4.err_invalid_parameter', parameter_name: @parameter_name, reason: @text)
       end
     end
   end
@@ -34,7 +35,7 @@ module Ricer4
       @key,@value = key,value
     end
     def message
-      I18n.t('ricer4.err_unknown_cli_parameter', key:@key, value:@value)
+      t('ricer4.err_unknown_cli_parameter', key:@key, value:@value)
     end
   end
   class CliParameterNotAllowed < ParameterException
@@ -42,7 +43,7 @@ module Ricer4
       @param = param
     end
     def message
-      I18n.t('ricer4.err_cli_parameter_not_allowed', param: @param.display_name)
+      t('ricer4.err_cli_parameter_not_allowed', param: @param.display_name)
     end
   end
   
@@ -51,13 +52,13 @@ module Ricer4
       @p = p
     end
     def message
-      I18n.t('ricer4.err_missing_parameter', parameter_name: @p.display_name, parameter_type: @p.display_type)    
+      t('ricer4.err_missing_parameter', parameter_name: @p.display_name, parameter_type: @p.display_type)    
     end
   end
 
   class MissingCLIParameterException < MissingParameterException
     def message
-      I18n.t('ricer4.err_missing_cli_parameter', parameter_name: @p.display_name, parameter_type: @p.display_type)    
+      t('ricer4.err_missing_cli_parameter', parameter_name: @p.display_name, parameter_type: @p.display_type)    
     end
   end
   
@@ -67,7 +68,7 @@ module Ricer4
       @plugin_trigger = t
     end
     def message
-      I18n.t('ricer4.err_unknown_command', trigger: @plugin_trigger)
+      t('ricer4.err_unknown_command', trigger: @plugin_trigger)
     end
   end
   
@@ -76,7 +77,7 @@ module Ricer4
       @connector = connector
     end
     def message
-      I18n.t('ricer4.err_unknown_connector', connector: @connector)
+      t('ricer4.err_unknown_connector', connector: @connector)
     end
   end
   
@@ -85,7 +86,7 @@ module Ricer4
       @plugin_name = plugin_name
     end
     def message
-      I18n.t('ricer4.err_unknown_plugin', plugin_name: @plugin_name)
+      t('ricer4.err_unknown_plugin', plugin_name: @plugin_name)
     end
   end
 

@@ -72,11 +72,16 @@ module Ricer4
     ############################
     ### THIS IS ONLY SPEC ##
     ### SPEC ONLY! #######
-     #################
+    ##################
     ### Exec faker ###
-     #################
+    ##################
+    def exec_server; Ricer4::Server.where(:conector => 'shell').first; end
+    def exec_connector; exec_server.connector; end
+    def exec_output; exec_connector.tty_output; end
+    
     def exec_line(line)
       result = nil
+      exec_connector.clear_tty_output
       exec_line_yielder(line){|text|
         result = text
       }
