@@ -8,7 +8,8 @@ module Ricer4::Include::Threaded
     command = current_command
     command.threading = true if command
     guid = Ricer4::Thread.fork_counter_inc
-    Ricer4::Thread.execute do
+    thread = Ricer4::Thread.execute do 
+      current_message.sender.localize!
       begin
         bot.log.debug "[#{guid}] Started thread at #{display_proc(proc)}"
         yield
@@ -23,21 +24,21 @@ module Ricer4::Include::Threaded
     end
   end
   
-  def worker_threaded(&block)
-    guid = Ricer4::Thread.fork_counter_inc
-    Ricer4::Thread.execute do
-      begin
-        bot.log.debug "[#{guid}] Started worker thread at #{display_proc(proc)}"
-        yield
-      rescue Interrupt, SignalException
-        raise
-      rescue Exception => e
-        bot.log.exception(e)
-      ensure
-        bot.log.debug "[#{guid}] Stopped worker thread at #{display_proc(proc)}"
-      end
-    end
-  end
+  # def worker_threaded(&block)
+    # guid = Ricer4::Thread.fork_counter_inc
+    # Ricer4::Thread.execute do
+      # begin
+        # bot.log.debug "[#{guid}] Started worker thread at #{display_proc(proc)}"
+        # yield
+      # rescue Interrupt, SignalException
+        # raise
+      # rescue Exception => e
+        # bot.log.exception(e)
+      # ensure
+        # bot.log.debug "[#{guid}] Stopped worker thread at #{display_proc(proc)}"
+      # end
+    # end
+  # end
 
   def service_threaded(&block)
     guid = Ricer4::Thread.fork_counter_inc

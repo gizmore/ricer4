@@ -40,6 +40,15 @@ module Ricer4::Extend::HasSetting
         else; raise Ricer4::ConfigException.new("Unknown scope for has_setting: #{scope}")
         end
       end
+      
+      def db_settings
+        Ricer4::Plugin.define_class_variable(:@db_settings, {})
+      end
+      
+      def memory_settings
+        Ricer4::Plugin.define_class_variable(:@mem_settings, [])
+      end
+      
 
       def arm_setting_name(name)
         "#{self.plugin_name}:#{name}".to_sym
@@ -57,7 +66,8 @@ module Ricer4::Extend::HasSetting
       def get_all_current_db_settings(name)
         db_settings = []
         name = arm_setting_name(name)
-        current_message.scopes.reverse.each do |scope|
+        scopes = current_message.scopes.reverse
+        scopes.each do |scope|
           if setting = object_for_scope(scope).db_setting(name)
             db_settings.push(setting)
           end

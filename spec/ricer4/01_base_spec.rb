@@ -7,14 +7,11 @@ describe Ricer4::Bot do
 
   bot = Ricer4::Bot.new("ricer4.spec.conf.yml")
   bot.db_connect
+  ActiveRecord::Magic::Update.install
+  ActiveRecord::Magic::Update.run
+  bot.load_plugins
+  ActiveRecord::Magic::Update.run
 
-  it("loads the plugins and can exec echo") do
-    ActiveRecord::Magic::Update.install
-    ActiveRecord::Magic::Update.run
-    bot.load_plugins
-    ActiveRecord::Magic::Update.run
-  end
-  
   it("can truncate all tables") do
     USERS.destroy_all
     CHANNELS.destroy_all

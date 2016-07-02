@@ -111,6 +111,11 @@ module Ricer4
       server = Ricer4::Server.where(:conector => 'shell').first
       server.connector.tty_user_name = username
     end
+    
+    def exec_user(username)
+      self.exec_user=username
+      exec_connector.get_tty_sender
+    end
 
     def exec_as(username, &block)
       self.exec_user=(username)
