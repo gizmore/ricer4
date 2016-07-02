@@ -64,7 +64,7 @@ module Ricer4::Extend::HasUsage
             elsif !usage.has_permission?
               wanted_permission = least_permission(usage.get_permission, wanted_permission)
             elsif args = usage.parse_args(self, line.dup)
-              arm_publish('ricer/triggered', self)
+              arm_publish('ricer/triggered', self, current_message.user)
               return usage.execute(self, args)
             end
           rescue ActiveRecord::Magic::InvalidParameter => e
