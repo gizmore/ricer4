@@ -89,6 +89,7 @@ module Ricer4
     end
 
     def exec_line_for(plugin_name, line="")
+      I18n.locale = 'bot'
       plugin = @loader.get_plugin!(plugin_name)
       line = line.empty? ? "" : " #{line}"
       exec_line "#{plugin.plugin_trigger}#{line}"

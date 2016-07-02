@@ -66,7 +66,7 @@ module Ricer4::Extend::HasSetting
       def get_all_current_db_settings(name)
         db_settings = []
         name = arm_setting_name(name)
-        scopes = current_message.scopes.reverse
+        scopes = current_message ? current_message.scopes.reverse : [:bot]
         scopes.each do |scope|
           if setting = object_for_scope(scope).db_setting(name)
             db_settings.push(setting)
