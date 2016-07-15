@@ -24,7 +24,7 @@ module Ricer4::Extend::HasSetting
         when :server; Ricer4::Server
         when :channel; Ricer4::Channel
         when :user; Ricer4::User
-        when :bot; Ricer4::Plugin
+        when :bot; self
         else; raise Ricer4::ConfigException.new("Unknown scope for has_setting: #{scope}")
         end
       end
@@ -42,14 +42,34 @@ module Ricer4::Extend::HasSetting
       end
       
       def db_settings
-        Ricer4::Plugin.define_class_variable(:@db_settings, {})
+        define_class_variable(:@db_settings, {})
       end
       
       def memory_settings
-        Ricer4::Plugin.define_class_variable(:@mem_settings, [])
+        define_class_variable(:@mem_settings, [])
       end
       
+      def all_setting_scopes
+        [:server, :channel, :user, :bot]
+      end
+      
+      def current_setting_scopes
+        current_message.scopes
+      end
+      
+      def all_memory_settings
+        result = []
+        plugname = "#{self.plugin_name}:"
+        current_setting_scopes.each do |scope|
+          result += object_for_scope(scope).memory_settings.select{|setting|setting[:name].to_s.start_with?(plugname)}
+        end
+        result
+      end
 
+      def no_arm_setting_name(name)
+        name.to_s.substr_from(':').to_sym
+      end
+      
       def arm_setting_name(name)
         "#{self.plugin_name}:#{name}".to_sym
       end
@@ -75,16 +95,25 @@ module Ricer4::Extend::HasSetting
         db_settings
       end
       
-      def get_current_db_setting(name)
-        name = arm_setting_name(name)
-        current_message.scopes.reverse.each do |scope|
+      def first_matching_db_setting_for_scopes(name, scopes)
+        scopes.each do |scope|
           if setting = object_for_scope(scope).db_setting(name)
             return setting
           end
         end
         nil
       end
-        
+      
+      def scope_db_setting(name, scope)
+        name = arm_setting_name(name)
+        object_for_scope(scope).db_setting(name)
+      end
+      
+      def get_current_db_setting(name)
+        name = arm_setting_name(name)
+        first_matching_db_setting_for_scopes(name, current_message.scopes.reverse)
+      end
+
       def get_setting(name)
         settings = get_all_current_db_settings(name)
         settings.each do |setting|
@@ -99,10 +128,11 @@ module Ricer4::Extend::HasSetting
         get_current_db_setting(name).save_value(value)
       end
       
-      def bot_setting(name); object_for_scope(:bot).db_setting(arm_setting_name(name)); end
-      def user_setting(name); object_for_scope(:user).db_setting(arm_setting_name(name)); end
-      def channel_setting(name); object_for_scope(:channel).db_setting(arm_setting_name(name)); end
-      def server_setting(name); object_for_scope(:server).db_setting(arm_setting_name(name)); end
+      def scope_setting(name, scope); object_for_scope(scope).db_setting(arm_setting_name(name)); end
+      def bot_setting(name); scope_setting(name, :bot); end
+      def user_setting(name); scope_setting(name, :user); end
+      def channel_setting(name); scope_setting(name, :channel); end
+      def server_setting(name); scope_setting(name, :server); end
       
       def get_bot_setting(name); bot_setting(name).get_value; end
       def get_user_setting(name); user_setting(name).get_value; end

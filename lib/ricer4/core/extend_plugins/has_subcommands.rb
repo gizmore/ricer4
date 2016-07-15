@@ -9,7 +9,7 @@ module Ricer4::Extend::HasSubcommands
       protected
       
       def plugin_subcommand_description
-        tt!('ricer4.subcommands', triggers: join(plugin_subcommand_trigers))
+        t('ricer4.subcommands', triggers: join(plugin_subcommand_trigers))
       end
       
       def plugin_subcommand_trigers

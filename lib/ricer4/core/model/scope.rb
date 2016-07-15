@@ -2,6 +2,8 @@ module Ricer4
   class Scope
     
     attr_reader :char, :bit, :name
+    
+    arm_i18n
   
     def initialize(hash)
       hash.each { |name, value| instance_variable_set("@#{name}", value) }
@@ -38,8 +40,8 @@ module Ricer4
     end
     
     def in_scope?(scope); (scope.bit & self.bit) > 0; end
-    def to_label; I18n.t('ricer4.scope.'+self.char); end
-    def to_usage_label; I18n.t('ricer4.scope.usage.'+self.char); end
+    def to_label; t('ricer4.scope.'+self.char); end
+    def to_usage_label; t('ricer4.scope.usage.'+self.char); end
     
     def everywhere?; (self.bit & EVERYWHERE.bit) == EVERYWHERE.bit; end
     def channel?; (self.bit & CHANNEL.bit) > 0; end

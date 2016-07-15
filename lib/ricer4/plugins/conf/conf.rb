@@ -7,7 +7,8 @@ module Ricer4::Plugins::Conf
     has_usage  '<plugin> <variable>', function: :show_var
     has_usage  '<plugin>', function: :show_vars
 
-    def config_scope; Ricer4::Plug::Setting::SCOPES; end
+    def config_scope; current_message.scopes; end
+#    def config_object; end
 
   end
 end
