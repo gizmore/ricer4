@@ -129,15 +129,15 @@ module Ricer4::Extend::HasSetting
       end
       
       def scope_setting(name, scope); object_for_scope(scope).db_setting(arm_setting_name(name)); end
-      def bot_setting(name); scope_setting(name, :bot); end
-      def user_setting(name); scope_setting(name, :user); end
-      def channel_setting(name); scope_setting(name, :channel); end
-      def server_setting(name); scope_setting(name, :server); end
+      def bot_setting(name); self.db_setting(arm_setting_name(name)); end
+      def user_setting(user, name); user.db_setting(arm_setting_name(name)); end
+      def channel_setting(channel, name); channel.db_setting(arm_setting_name(name)); end
+      def server_setting(server, name); server.db_setting(arm_setting_name(name)); end
       
       def get_bot_setting(name); bot_setting(name).get_value; end
-      def get_user_setting(name); user_setting(name).get_value; end
-      def get_channel_setting(name); channel_setting(name).get_value; end
-      def get_server_setting(name); server_setting(name).get_value; end
+      def get_user_setting(user, name); user_setting(user, name).get_value; end
+      def get_channel_setting(channel, name); channel_setting(channel, name).get_value; end
+      def get_server_setting(server, name); server_setting(server, name).get_value; end
 
       def save_bot_setting(name, value); bot_setting(name).save_value(value); end
       def save_user_setting(name, value); user_setting(name).save_value(value); end
